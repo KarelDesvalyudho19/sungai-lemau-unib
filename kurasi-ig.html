@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurasi Indikasi Geografis — LemauGo.id</title>
+<meta name="description" content="Sistem kurasi dan validasi keaslian produk Batik Sungai Lemau berbasis Indikasi Geografis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root{--maroon:#6B1F2A;--maroon-dark:#4E1520;--maroon-soft:#82253A;--maroon-mist:#F9F0F2;--beige:#F5F0E6;--beige-warm:#EFE8D8;--beige-deep:#E4D8C2;--gold-pale:#FDF6E9}
+.ig-hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 60%,#7D2436 100%);color:var(--beige);padding:var(--s8) 0 var(--s7);position:relative;overflow:hidden;text-align:center}
+.ig-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(195,154,82,.05) 0,rgba(195,154,82,.05) 1px,transparent 0,transparent 50%);background-size:22px 22px}
+.ig-hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 var(--s5)}
+.ig-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(195,154,82,.18);border:1px solid rgba(195,154,82,.4);color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:var(--s4)}
+.ig-hero h1{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--beige);margin-bottom:var(--s3);line-height:1.15}
+.ig-hero p{font-size:var(--fs-base);color:rgba(245,240,230,.78);max-width:560px;margin:0 auto}
+.role-switch{background:var(--beige);border-bottom:1px solid var(--beige-deep);padding:var(--s4) 0;position:sticky;top:0;z-index:100}
+.role-switch-inner{max-width:900px;margin:0 auto;padding:0 var(--s5);display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
+.role-btn{padding:9px 22px;border-radius:8px;border:2px solid var(--beige-deep);background:#fff;font-weight:600;font-size:var(--fs-small);color:var(--text-muted,#6E6A5E);cursor:pointer;transition:all .2s}
+.role-btn.active{border-color:var(--maroon);background:var(--maroon);color:#fff}
+.role-btn:hover:not(.active){border-color:var(--maroon-soft);color:var(--maroon)}
+.ig-main{max-width:900px;margin:0 auto;padding:var(--s7) var(--s5)}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.s-draft{background:#F3F4F6;color:#6B7280}.s-menunggu{background:#FEF3C7;color:#92400E}.s-review{background:#DBEAFE;color:#1E40AF}.s-terverifikasi{background:#D1FAE5;color:#065F46}.s-ditolak{background:#FEE2E2;color:#991B1B}
+.ig-card{background:#fff;border:1px solid var(--beige-deep);border-radius:18px;padding:var(--s6);box-shadow:0 2px 20px rgba(107,31,42,.06);margin-bottom:var(--s5)}
+.ig-card h3{font-family:var(--font-heading);font-size:1.3rem;color:var(--maroon-dark);margin-bottom:var(--s5);display:flex;align-items:center;gap:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.fg{display:flex;flex-direction:column;gap:6px}.fg.full{grid-column:1/-1}
+.fg label{font-size:12px;font-weight:700;color:var(--maroon-dark);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg textarea,.fg select{border:1.5px solid var(--beige-deep);border-radius:8px;padding:10px 14px;font-size:var(--fs-base);font-family:inherit;background:#fff;color:var(--maroon-dark);transition:border-color .2s;outline:none}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--maroon)}
+.fg textarea{resize:vertical;min-height:80px}
+.file-area{border:2px dashed var(--beige-deep);border-radius:10px;padding:var(--s4);text-align:center;color:var(--text-muted,#6E6A5E);font-size:var(--fs-small);cursor:pointer;background:var(--beige)}
+.file-area:hover{border-color:var(--maroon)}
+.form-actions{display:flex;gap:var(--s3);flex-wrap:wrap;margin-top:var(--s4)}
+.btn-submit{background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-weight:700;font-size:var(--fs-base);cursor:pointer;transition:background .2s}
+.btn-submit:hover{background:var(--maroon-soft)}
+.btn-draft{background:#fff;color:var(--maroon);border:2px solid var(--maroon);border-radius:8px;padding:10px 22px;font-weight:700;cursor:pointer}
+.btn-draft:hover{background:var(--maroon-mist)}
+.pengajuan-list{display:flex;flex-direction:column;gap:var(--s3)}
+.pengajuan-card{background:#fff;border:1px solid var(--beige-deep);border-radius:14px;padding:var(--s4) var(--s5);display:flex;align-items:flex-start;gap:var(--s4)}
+.pengajuan-card:hover{box-shadow:0 4px 16px rgba(107,31,42,.08)}
+.p-no{width:44px;height:44px;border-radius:12px;background:var(--maroon-mist);color:var(--maroon);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.p-body{flex:1;min-width:0}
+.p-nama{font-weight:700;color:var(--maroon-dark);margin-bottom:3px}
+.p-meta{font-size:12px;color:var(--text-muted,#6E6A5E)}
+.p-komen{background:var(--beige);border-left:3px solid var(--maroon);border-radius:0 8px 8px 0;padding:8px 12px;margin-top:8px;font-size:var(--fs-small);color:var(--maroon-dark)}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);margin-bottom:var(--s6)}
+.admin-stat{background:#fff;border:1px solid var(--beige-deep);border-radius:14px;padding:var(--s4);text-align:center}
+.a-num{font-family:var(--font-heading);font-size:2.4rem;color:var(--maroon);font-weight:700;line-height:1}
+.a-lbl{font-size:12px;color:var(--text-muted,#6E6A5E);margin-top:4px}
+.admin-tbl{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--beige-deep)}
+.admin-tbl th{background:var(--maroon);color:var(--beige);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:12px 14px;text-align:left}
+.admin-tbl td{padding:11px 14px;border-bottom:1px solid var(--beige-deep);font-size:var(--fs-small);vertical-align:top}
+.admin-tbl tr:last-child td{border-bottom:none}
+.admin-tbl tr:hover td{background:var(--maroon-mist)}
+.action-btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn-ok{background:#D1FAE5;color:#065F46;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-ok:hover{background:#A7F3D0}
+.btn-no{background:#FEE2E2;color:#991B1B;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-no:hover{background:#FECACA}
+.btn-cm{background:var(--gold-pale);color:#7A5820;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-cm:hover{background:var(--beige-deep)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center}
+.modal-bg.show{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:var(--s6);max-width:480px;width:90%}
+@media(max-width:640px){.form-grid,.admin-stats{grid-template-columns:1fr}.admin-tbl{font-size:11px}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="ig-hero">
+  <div class="ig-hero-inner">
+    <div class="ig-badge">&#9733; Indikasi Geografis</div>
+    <h1>Sistem Kurasi IG Batik Sungai Lemau</h1>
+    <p>Validasi keaslian produk berbasis Indikasi Geografis. Kolaborasi pengrajin dan MPIG untuk menjaga mutu dan keotentikan Batik Sungai Lemau.</p>
+  </div>
+</section>
+<div class="role-switch">
+  <div class="role-switch-inner">
+    <span style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Mode:</span>
+    <button class="role-btn active" id="btn-pengrajin" onclick="APP.setRole('pengrajin')">&#9998; Pengrajin</button>
+    <button class="role-btn" id="btn-admin" onclick="APP.setRole('admin')">&#10003; MPIG / Admin</button>
+  </div>
+</div>
+<div class="ig-main">
+  <!-- PENGRAJIN -->
+  <div id="view-pengrajin">
+    <div class="ig-card">
+      <h3>&#9993; Form Pengajuan Kurasi IG</h3>
+      <form id="form-kurasi" onsubmit="APP.submitKurasi(event)">
+        <div class="form-grid">
+          <div class="fg"><label for="f-produk">Nama Produk *</label><input id="f-produk" type="text" placeholder="cth. Kain Tulis Motif Rafflesia Premium" required></div>
+          <div class="fg"><label for="f-pengrajin">Nama Pengrajin *</label><input id="f-pengrajin" type="text" placeholder="Nama lengkap pengrajin" required></div>
+          <div class="fg"><label for="f-motif">Motif *</label>
+            <select id="f-motif" required><option value="">-- Pilih Motif --</option><option>Rafflesia</option><option>Liku Sembilan</option><option>Gunung Bungkuk</option><option>Sungai Mengalir</option><option>Riak Air</option><option>Bunga Pandan</option><option>Lainnya</option></select>
+          </div>
+          <div class="fg"><label for="f-asal">Asal Produksi *</label><input id="f-asal" type="text" placeholder="cth. Desa Panca Mukti, Pondok Kelapa" required></div>
+          <div class="fg full"><label for="f-filosofi">Filosofi Motif *</label><textarea id="f-filosofi" placeholder="Ceritakan makna dan filosofi budaya motif ini..." required></textarea></div>
+          <div class="fg full"><label for="f-teknik">Teknik Produksi *</label><textarea id="f-teknik" placeholder="cth. Batik tulis dengan lilin tawon, pewarna alam kulit kayu..." required></textarea></div>
+          <div class="fg"><label>Foto Produk *</label><div class="file-area" onclick="document.getElementById('f-fp').click()">&#128247; Klik upload foto produk<br><small>JPG/PNG maks 5MB</small></div><input type="file" id="f-fp" accept="image/*" style="display:none" multiple></div>
+          <div class="fg"><label>Foto Proses Produksi *</label><div class="file-area" onclick="document.getElementById('f-fpr').click()">&#9998; Klik upload foto proses<br><small>Min. 5 foto tahapan</small></div><input type="file" id="f-fpr" accept="image/*" style="display:none" multiple></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">&#9654; Ajukan untuk Kurasi</button>
+          <button type="button" class="btn-draft" onclick="APP.saveDraft()">Simpan Draft</button>
+        </div>
+      </form>
+    </div>
+    <div class="ig-card">
+      <h3>&#9776; Riwayat Pengajuan Saya</h3>
+      <div class="pengajuan-list" id="list-pengrajin"></div>
+    </div>
+  </div>
+  <!-- ADMIN -->
+  <div id="view-admin" style="display:none">
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="ig-card">
+      <h3>&#9998; Semua Pengajuan Kurasi IG</h3>
+      <div style="overflow-x:auto">
+        <table class="admin-tbl"><thead><tr><th>Produk</th><th>Pengrajin</th><th>Motif</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody id="admin-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal komentar -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal-box">
+    <h4 style="color:var(--maroon-dark);margin-bottom:var(--s4)">Komentar Kurasi</h4>
+    <textarea id="komentar-text" style="width:100%;border:1.5px solid var(--beige-deep);border-radius:8px;padding:10px;font-family:inherit;resize:vertical;min-height:100px" placeholder="Tuliskan catatan atau permintaan revisi..."></textarea>
+    <div style="display:flex;gap:var(--s3);margin-top:var(--s4)">
+      <button onclick="APP.simpanKomentar()" style="background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-weight:700;cursor:pointer">Simpan</button>
+      <button onclick="APP.tutupModal()" style="background:var(--beige-deep);border:none;border-radius:8px;padding:10px 20px;font-weight:600;cursor:pointer">Batal</button>
+    </div>
+  </div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP=(function(){
+  SLGD.renderPublicHeader("kurasi-ig");
+  SLGD.renderPublicFooter();
+  var mt=null;
+  function badge(s){var m={"Draft":"s-draft","Menunggu Kurasi":"s-menunggu","Review MPIG":"s-review","Terverifikasi IG":"s-terverifikasi","Ditolak":"s-ditolak"};return '<span class="status-badge '+(m[s]||"s-draft")+'">'+s+'</span>';}
+  function renderPengrajin(){
+    var ik={"Draft":"&#128196;","Menunggu Kurasi":"&#8987;","Review MPIG":"&#128269;","Terverifikasi IG":"&#10003;","Ditolak":"&#10005;"};
+    document.getElementById("list-pengrajin").innerHTML=SLGD.DATA.kurasiIG.map(function(ig){
+      return '<div class="pengajuan-card"><div class="p-no">'+(ik[ig.status]||"&#128196;")+'</div><div class="p-body"><div class="p-nama">'+SLGD.esc(ig.produk)+'</div><div class="p-meta">Motif: '+SLGD.esc(ig.motif)+' &bull; '+ig.tgl+' &bull; '+badge(ig.status)+'</div>'+(ig.komentar?'<div class="p-komen"><strong>Catatan MPIG:</strong> '+SLGD.esc(ig.komentar)+'</div>':'')+'</div></div>';
+    }).join("");
+  }
+  function renderStats(){
+    var d=SLGD.DATA.kurasiIG;
+    var tv=d.filter(function(x){return x.status==="Terverifikasi IG";}).length;
+    var rv=d.filter(function(x){return x.status==="Review MPIG"||x.status==="Menunggu Kurasi";}).length;
+    document.getElementById("admin-stats").innerHTML='<div class="admin-stat"><div class="a-num">'+d.length+'</div><div class="a-lbl">Total Pengajuan</div></div><div class="admin-stat"><div class="a-num">'+rv+'</div><div class="a-lbl">Menunggu Review</div></div><div class="admin-stat"><div class="a-num">'+tv+'</div><div class="a-lbl">Terverifikasi IG</div></div>';
+  }
+  function renderTable(){
+    document.getElementById("admin-tbody").innerHTML=SLGD.DATA.kurasiIG.map(function(ig,i){
+      var a='<div class="action-btns">';
+      if(ig.status!=="Terverifikasi IG"&&ig.status!=="Ditolak")a+='<button class="btn-ok" onclick="APP.approve('+i+')">&#10003; Setujui</button><button class="btn-no" onclick="APP.reject('+i+')">&#10005; Tolak</button>';
+      a+='<button class="btn-cm" onclick="APP.openK('+i+')">&#128172; Komentar</button></div>';
+      return '<tr><td><strong>'+SLGD.esc(ig.produk)+'</strong></td><td>'+SLGD.esc(ig.pengrajin)+'</td><td>'+SLGD.esc(ig.motif)+'</td><td>'+ig.tgl+'</td><td>'+badge(ig.status)+'</td><td>'+a+'</td></tr>';
+    }).join("");
+  }
+  renderPengrajin();
+  return {
+    setRole:function(r){
+      document.getElementById("view-pengrajin").style.display=r==="pengrajin"?"block":"none";
+      document.getElementById("view-admin").style.display=r==="admin"?"block":"none";
+      document.getElementById("btn-pengrajin").classList.toggle("active",r==="pengrajin");
+      document.getElementById("btn-admin").classList.toggle("active",r==="admin");
+      if(r==="admin"){renderStats();renderTable();}
+    },
+    submitKurasi:function(e){
+      e.preventDefault();
+      SLGD.DATA.kurasiIG.unshift({id:"ig"+Date.now(),produk:document.getElementById("f-produk").value,pengrajin:document.getElementById("f-pengrajin").value,artisanId:"p1",motif:document.getElementById("f-motif").value,filosofi:document.getElementById("f-filosofi").value,asal:document.getElementById("f-asal").value,teknik:document.getElementById("f-teknik").value,tgl:new Date().toISOString().split("T")[0],status:"Menunggu Kurasi",komentar:"",reviewer:""});
+      renderPengrajin();e.target.reset();if(SLGD.toast)SLGD.toast("Pengajuan kurasi berhasil dikirim.");
+    },
+    saveDraft:function(){if(SLGD.toast)SLGD.toast("Draft tersimpan.");},
+    approve:function(i){SLGD.DATA.kurasiIG[i].status="Terverifikasi IG";SLGD.DATA.kurasiIG[i].reviewer="Admin MPIG";renderTable();renderStats();if(SLGD.toast)SLGD.toast("Produk disetujui dan terverifikasi IG.");},
+    reject:function(i){SLGD.DATA.kurasiIG[i].status="Ditolak";renderTable();renderStats();if(SLGD.toast)SLGD.toast("Produk ditolak.");},
+    openK:function(i){mt=i;document.getElementById("komentar-text").value=SLGD.DATA.kurasiIG[i].komentar||"";document.getElementById("modal-bg").classList.add("show");},
+    simpanKomentar:function(){if(mt!==null){SLGD.DATA.kurasiIG[mt].komentar=document.getElementById("komentar-text").value;renderTable();if(SLGD.toast)SLGD.toast("Komentar disimpan.");}this.tutupModal();},
+    tutupModal:function(){document.getElementById("modal-bg").classList.remove("show");mt=null;}
+  };
+})();
+</script>
+</body>
+</html>

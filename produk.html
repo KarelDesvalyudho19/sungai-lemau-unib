@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detail Produk — LemauGo.id</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Jejak navigasi" id="crumbs"></nav>
+    <div class="pdp" id="pdp"></div>
+  </div>
+
+  <section class="section section-alt" aria-labelledby="rek-title">
+    <div class="container">
+      <div class="section-head">
+        <span id="accent-r"></span>
+        <h2 id="rek-title">Produk Lain yang Mungkin Anda Suka</h2>
+      </div>
+      <div class="product-grid" id="rekomendasi"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  SLGD.renderPublicHeader("./", "jelajahi");
+  SLGD.renderPublicFooter("./");
+  document.getElementById("accent-r").outerHTML = SLGD.riverAccent();
+
+  var id = new URLSearchParams(location.search).get("id") || "b001";
+  var p = SLGD.DATA.productById(id) || SLGD.DATA.products[0];
+  var a = SLGD.DATA.artisanById(p.artisanId);
+  document.title = p.nama + " — LemauGo.id";
+
+  document.getElementById("crumbs").innerHTML =
+    '<a href="index.html">Beranda</a> › <a href="jelajahi.html">Jelajahi Produk</a> › <span aria-current="page">' + SLGD.esc(p.nama) + "</span>";
+
+  /* Galeri: foto produk + foto pendukung dokumenter */
+  var galeri = [
+    { src: p.img, alt: p.nama + " — foto produk (placeholder simulasi)" },
+    { src: "detail-motif.jpg", alt: "Detail motif kain dari dekat (placeholder simulasi)" },
+    { src: "proses-canting.jpg", alt: "Proses membatik dengan canting (placeholder simulasi)" },
+    { src: "ruang-kerja.jpg", alt: "Ruang kerja pengrajin (placeholder simulasi)" }
+  ];
+
+  var stokBadge = "";
+  if (p.stok === "Tersedia") stokBadge = '<span class="badge badge-verified-light">Tersedia</span>';
+  if (p.stok === "Preorder") stokBadge = '<span class="badge badge-neutral">Preorder</span>';
+  if (p.stok === "Habis") stokBadge = '<span class="badge badge-danger">Stok habis</span>';
+  var verifBadge = p.terverifikasi
+    ? '<span class="badge badge-verified">' + SLGD.icon("shield", 12) + "Terverifikasi IG</span>"
+    : '<span class="badge badge-warn">Dalam proses kurasi</span>';
+
+  var kodeProduk = "SLG-" + p.id.toUpperCase();
+  var tglVerif = SLGD.tanggalID(p.tanggal);
+
+  document.getElementById("pdp").innerHTML =
+    '<div class="pdp-gallery">' +
+      '<div class="main-img"><img id="main-img" src="assets/img/' + galeri[0].src + '" alt="' + SLGD.esc(galeri[0].alt) + '"></div>' +
+      '<div class="pdp-thumbs" role="group" aria-label="Pilih foto">' +
+        galeri.map(function (g, i) {
+          return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '" aria-label="Foto ' + (i + 1) + '"><img src="assets/img/' + g.src + '" alt=""></button>';
+        }).join("") +
+      "</div>" +
+    "</div>" +
+    '<div class="pdp-info">' +
+      '<p class="product-motif">Motif ' + SLGD.esc(p.motif) + " · " + SLGD.esc(p.jenis) + "</p>" +
+      "<h1>" + SLGD.esc(p.nama) + "</h1>" +
+      '<div class="pdp-badges">' + verifBadge + stokBadge + "</div>" +
+      '<p class="pdp-price">' + SLGD.rupiah(p.harga) + "</p>" +
+      '<p class="pdp-artisan-line">Karya <a href="pengrajin.html?id=' + a.id + '">' + SLGD.esc(a.nama) + "</a> · " + SLGD.esc(a.usaha) + " · " + SLGD.esc(a.lokasi) + ", Bengkulu Tengah</p>" +
+
+      '<div class="variasi"><label id="var-label">Pilih ukuran / variasi</label>' +
+        '<div class="var-options" role="group" aria-labelledby="var-label">' +
+          p.ukuran.map(function (u, i) {
+            return '<button type="button" data-var="' + SLGD.esc(u) + '" aria-pressed="' + (i === 0) + '">' + SLGD.esc(u) + "</button>";
+          }).join("") +
+        "</div></div>" +
+
+      '<div class="pdp-cta">' +
+        '<div class="pdp-cta-row">' +
+          '<button class="btn btn-primary" id="cta-marketplace">Pesan melalui Marketplace</button>' +
+          '<button class="btn btn-terracotta" id="cta-qris">Bayar dengan QRIS</button>' +
+        "</div>" +
+        '<button class="btn btn-secondary" id="cta-kontak">Hubungi Pengrajin</button>' +
+      "</div>" +
+
+      '<ul class="spec-list">' +
+        '<li><span class="k">Makna motif</span><span>' + SLGD.esc(p.makna) + "</span></li>" +
+        '<li><span class="k">Bahan</span><span>' + SLGD.esc(p.bahan) + "</span></li>" +
+        '<li><span class="k">Proses produksi</span><span>' + SLGD.esc(p.proses) + "</span></li>" +
+        '<li><span class="k">Estimasi pengerjaan</span><span>' + SLGD.esc(p.estimasi) + "</span></li>" +
+        '<li><span class="k">Lokasi asal</span><span>' + SLGD.esc(a.lokasi) + ", Kabupaten Bengkulu Tengah</span></li>" +
+      "</ul>" +
+
+      '<div class="verify-block">' +
+        "<h2>" + SLGD.icon("shield", 18) + " Verifikasi Produk</h2>" +
+        "<ul>" +
+          "<li>Produk ditayangkan oleh pengrajin yang telah melalui proses verifikasi.</li>" +
+          '<li><span class="k">Kode produk</span> ' + kodeProduk + "</li>" +
+          '<li><span class="k">Status kurasi</span> ' + (p.terverifikasi ? "Lolos kurasi etalase kolektif" : "Dalam proses kurasi") + "</li>" +
+          '<li><span class="k">Tanggal verifikasi</span> ' + tglVerif + " (data simulasi)</li>" +
+        "</ul>" +
+      "</div>" +
+    "</div>";
+
+  /* Galeri interaktif */
+  var mainImg = document.getElementById("main-img");
+  document.querySelectorAll(".pdp-thumbs button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var g = galeri[Number(btn.dataset.i)];
+      mainImg.src = "assets/img/" + g.src;
+      mainImg.alt = g.alt;
+      document.querySelectorAll(".pdp-thumbs button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+    });
+  });
+
+  /* Variasi */
+  document.querySelectorAll(".var-options button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".var-options button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+    });
+  });
+
+  /* CTA demonstrasi */
+  document.getElementById("cta-marketplace").addEventListener("click", function () {
+    SLGD.modal({
+      judul: "Pesan melalui Marketplace",
+      isi: '<p>Pada versi penuh, tombol ini mengarahkan pembeli ke halaman produk resmi pengrajin di marketplace. Pada prototipe ini alur berhenti di sini sebagai demonstrasi.</p><p class="text-muted" style="font-size:var(--fs-small);">Kanal penjualan ' + SLGD.esc(a.usaha) + ": " + SLGD.esc(a.kanal.join(", ")) + ".</p>"
+    });
+  });
+  document.getElementById("cta-qris").addEventListener("click", function () {
+    SLGD.modal({
+      judul: "Pembayaran QRIS (Demonstrasi)",
+      isi: '<div style="text-align:center;"><svg width="140" height="140" viewBox="0 0 29 29" style="border:1px solid var(--line); border-radius:8px; padding:8px; background:#fff;" aria-label="Contoh kode QR demonstrasi"><rect width="29" height="29" fill="#fff"/><path fill="#262724" d="M2 2h7v7H2zM4 4v3h3V4zM20 2h7v7h-7zM22 4v3h3V4zM2 20h7v7H2zM4 22v3h3V22zM12 2h2v2h-2zM16 2h2v4h-2zM12 6h4v2h-4zM12 10h2v2h-2zM16 10h6v2h-6zM24 10h3v2h-3zM2 12h4v2H2zM8 12h2v4H8zM12 14h6v2h-6zM20 14h2v2h-2zM24 14h3v4h-3zM2 16h4v2H2zM12 18h2v4h-2zM16 18h4v2h-4zM22 18h2v4h-2zM12 24h4v3h-4zM18 24h2v3h-2zM22 24h5v3h-5zM26 20h1v2h-1z"/></svg><p style="margin-top:var(--s3);">Ini contoh tampilan, bukan transaksi riil. Pada rancangan implementasi, kode QRIS resmi milik pengrajin akan tampil di sini.</p></div>'
+    });
+  });
+  document.getElementById("cta-kontak").addEventListener("click", function () {
+    SLGD.modal({
+      judul: "Hubungi Pengrajin",
+      isi: "<p>" + SLGD.esc(a.nama) + " (" + SLGD.esc(a.usaha) + ") dapat dihubungi melalui kanal berikut (data dummy):</p><ul><li>WhatsApp: +62 813-0000-0000</li><li>Telepon: +62 736-000-000</li><li>Kunjungan: " + SLGD.esc(a.lokasi) + ", Bengkulu Tengah</li></ul>"
+    });
+  });
+
+  /* Rekomendasi: 4 produk lain, prioritas pengrajin sama */
+  var rek = SLGD.DATA.products
+    .filter(function (x) { return x.id !== p.id; })
+    .sort(function (x, y) {
+      var sx = (x.artisanId === p.artisanId ? -1 : 0) + (x.jenis === p.jenis ? -0.5 : 0);
+      var sy = (y.artisanId === p.artisanId ? -1 : 0) + (y.jenis === p.jenis ? -0.5 : 0);
+      return sx - sy || y.populer - x.populer;
+    })
+    .slice(0, 4);
+  document.getElementById("rekomendasi").innerHTML =
+    rek.map(function (x) { return SLGD.productCard(x, "./"); }).join("");
+})();
+</script>
+</body>
+</html>

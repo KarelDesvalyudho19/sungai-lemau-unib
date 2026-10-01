@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pengrajin Batik Sungai Lemau — LemauGo.id</title>
+<meta name="description" content="Daftar pengrajin Batik Sungai Lemau terverifikasi dari Bengkulu Tengah. Kenali pengrajin di balik setiap karya.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+
+  <!-- ===== MODE DAFTAR (tidak ada ?id) ===== -->
+  <div id="mode-daftar">
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">Komunitas Pengrajin</span>
+        <h1>Pengrajin Batik Sungai Lemau</h1>
+        <p>Kenali pengrajin di balik setiap karya. Setiap profil melalui proses verifikasi identitas dan kurasi produk sebelum tayang di etalase kolektif.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span id="accent-pgr"></span>
+          <h2>Pengrajin Terverifikasi</h2>
+          <p>Seluruh produk yang tayang di etalase kolektif berasal dari pengrajin yang telah melalui proses verifikasi identitas dan asal produksi.</p>
+        </div>
+        <div class="artisan-grid" id="daftar-grid"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span id="accent-pgr2"></span>
+          <h2>Pengrajin Dalam Proses Kurasi</h2>
+          <p>Pengrajin berikut sedang dalam proses verifikasi. Produk mereka akan tayang setelah proses kurasi selesai.</p>
+        </div>
+        <div class="artisan-grid" id="proses-grid"></div>
+        <div class="empty-state" id="proses-empty" hidden>
+          <p class="mb-0">Semua pengrajin terdaftar telah terverifikasi.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== MODE DETAIL (?id=px) ===== -->
+  <div id="mode-detail" hidden>
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Jejak navigasi" id="crumbs"></nav>
+      <div class="artisan-hero" id="hero"></div>
+    </div>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span id="accent-k"></span>
+          <h2 id="koleksi-title">Koleksi Produk</h2>
+          <p id="koleksi-sub"></p>
+        </div>
+        <div class="product-grid product-grid-3" id="koleksi"></div>
+        <div class="empty-state" id="koleksi-empty" hidden>
+          <h3>Belum ada produk tayang</h3>
+          <p class="mb-0">Produk pengrajin ini sedang dalam proses kurasi.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  SLGD.renderPublicHeader("./", "pengrajin");
+  SLGD.renderPublicFooter("./");
+
+  var id = new URLSearchParams(location.search).get("id");
+
+  /* ─── MODE DETAIL ─── */
+  if (id) {
+    document.getElementById("mode-daftar").hidden = true;
+    document.getElementById("mode-detail").hidden = false;
+
+    var a = SLGD.DATA.artisanById(id) || SLGD.DATA.artisans[0];
+    document.title = a.nama + " — " + a.usaha + " — LemauGo.id";
+
+    document.getElementById("crumbs").innerHTML =
+      '<a href="index.html">Beranda</a> › <a href="pengrajin.html">Pengrajin</a> › <span aria-current="page">' + SLGD.esc(a.nama) + "</span>";
+
+    document.getElementById("accent-k").outerHTML = SLGD.riverAccent();
+
+    var foto = a.foto
+      ? '<img src="assets/img/' + a.foto + '" alt="Potret ' + SLGD.esc(a.nama) + ' — foto placeholder simulasi">'
+      : '<div class="avatar-fallback">' + SLGD.esc(a.inisial) + "</div>";
+    var badge = a.terverifikasi
+      ? '<span class="badge badge-verified">' + SLGD.icon("shield", 12) + "Pengrajin terverifikasi</span>"
+      : '<span class="badge badge-warn">' + SLGD.esc(a.statusKurasi || "Proses kurasi") + "</span>";
+
+    document.getElementById("hero").innerHTML =
+      '<div class="photo">' + foto + "</div>" +
+      "<div>" +
+        '<span class="eyebrow">Profil Pengrajin</span>' +
+        "<h1>" + SLGD.esc(a.nama) + "</h1>" +
+        '<p class="artisan-usaha" style="font-size:1.05rem;">' + SLGD.esc(a.usaha) + "</p>" +
+        '<p class="text-muted">' + SLGD.icon("pin", 14) + " " + SLGD.esc(a.lokasi) + ", Kabupaten Bengkulu Tengah</p>" +
+        '<div style="margin: var(--s2) 0 var(--s4);">' + badge + "</div>" +
+        "<p>" + SLGD.esc(a.cerita) + "</p>" +
+        '<div class="artisan-stats">' +
+          '<div class="stat"><strong>' + a.pengalaman + " th</strong><span>Pengalaman membatik</span></div>" +
+          '<div class="stat"><strong>' + a.produkAktif + "</strong><span>Produk aktif</span></div>" +
+          '<div class="stat"><strong>' + a.pesananSelesai + "</strong><span>Pesanan selesai (simulasi)</span></div>" +
+        "</div>" +
+        "<h2 style=\"font-size:1.05rem; font-family:var(--font-body); font-weight:700; margin-top:var(--s4);\">Teknik produksi</h2>" +
+        '<ul class="chip-list">' + a.teknik.map(function (t) { return "<li>" + SLGD.esc(t) + "</li>"; }).join("") + "</ul>" +
+        "<h2 style=\"font-size:1.05rem; font-family:var(--font-body); font-weight:700; margin-top:var(--s4);\">Kanal penjualan</h2>" +
+        '<ul class="chip-list">' + (a.kanal || []).map(function (k) { return "<li>" + SLGD.esc(k) + "</li>"; }).join("") + "</ul>" +
+        '<div style="margin-top: var(--s5); display:flex; gap: var(--s3); flex-wrap: wrap;">' +
+          '<button class="btn btn-primary" id="cta-hubungi">Hubungi Pengrajin</button>' +
+          '<a class="btn btn-secondary" href="jelajahi.html?pengrajin=' + a.id + '">Lihat di Katalog</a>' +
+        "</div>" +
+      "</div>";
+
+    document.getElementById("cta-hubungi").addEventListener("click", function () {
+      SLGD.modal({
+        judul: "Hubungi " + a.nama,
+        isi: "<p>Kontak berikut merupakan data dummy untuk demonstrasi:</p><ul><li>WhatsApp: +62 813-0000-0000</li><li>Telepon: +62 736-000-000</li><li>Kunjungan: " + SLGD.esc(a.lokasi) + ", Bengkulu Tengah</li></ul>"
+      });
+    });
+
+    var koleksi = SLGD.DATA.products.filter(function (p) { return p.artisanId === a.id; });
+    document.getElementById("koleksi-title").textContent = "Koleksi " + a.usaha;
+    document.getElementById("koleksi-sub").textContent = koleksi.length + " produk tayang di etalase kolektif (data simulasi).";
+    if (koleksi.length) {
+      document.getElementById("koleksi").innerHTML = koleksi.map(function (p) { return SLGD.productCard(p, "./"); }).join("");
+    } else {
+      document.getElementById("koleksi-empty").hidden = false;
+    }
+
+  /* ─── MODE DAFTAR ─── */
+  } else {
+    document.title = "Pengrajin Batik Sungai Lemau — LemauGo.id";
+    document.getElementById("accent-pgr").outerHTML = SLGD.riverAccent();
+    document.getElementById("accent-pgr2").outerHTML = SLGD.riverAccent();
+
+    var terverifikasi = SLGD.DATA.artisans.filter(function (a) { return a.terverifikasi; });
+    var dalamProses   = SLGD.DATA.artisans.filter(function (a) { return !a.terverifikasi; });
+
+    document.getElementById("daftar-grid").innerHTML = terverifikasi.map(function (a) {
+      return artisanCard(a);
+    }).join("");
+
+    if (dalamProses.length) {
+      document.getElementById("proses-grid").innerHTML = dalamProses.map(function (a) {
+        return artisanCard(a);
+      }).join("");
+    } else {
+      document.getElementById("proses-empty").hidden = false;
+    }
+  }
+
+  /* Kartu pengrajin untuk mode daftar (dengan tombol Lihat Profil) */
+  function artisanCard(a) {
+    var foto = a.foto
+      ? '<img src="assets/img/' + a.foto + '" alt="Potret ' + SLGD.esc(a.nama) + ' — foto placeholder simulasi" loading="lazy">'
+      : '<div class="avatar-fallback" aria-hidden="true">' + SLGD.esc(a.inisial) + "</div>";
+    var badge = a.terverifikasi
+      ? '<span class="badge badge-verified-light">' + SLGD.icon("shield", 12) + "Pengrajin terverifikasi</span>"
+      : '<span class="badge badge-warn">' + SLGD.esc(a.statusKurasi || "Proses kurasi") + "</span>";
+    return '' +
+    '<article class="artisan-card">' +
+      '<div class="artisan-photo">' + foto + "</div>" +
+      '<div class="artisan-body">' +
+        badge +
+        "<h3>" + SLGD.esc(a.nama) + "</h3>" +
+        '<p class="artisan-usaha">' + SLGD.esc(a.usaha) + "</p>" +
+        '<p class="artisan-meta">' +
+          SLGD.icon("pin", 13) + " " + SLGD.esc(a.lokasi) + "<br>" +
+          a.pengalaman + " tahun membatik · " + a.produkAktif + " produk aktif" +
+        "</p>" +
+        '<a class="btn btn-secondary btn-small" href="pengrajin.html?id=' + a.id + '">Lihat Profil</a>' +
+      "</div>" +
+    "</article>";
+  }
+})();
+</script>
+</body>
+</html>

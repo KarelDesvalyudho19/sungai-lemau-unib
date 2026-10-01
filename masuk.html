@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masuk — LemauGo.id</title>
+<meta name="description" content="Masuk ke LemauGo.id sebagai pengrajin atau konsumen. Kelola etalase, pembukuan, dan ikuti perjalanan Batik Sungai Lemau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+.login-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: var(--s6);
+  gap: 0;
+}
+.login-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--s3) var(--s4);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 150ms, border-color 150ms;
+}
+.login-tab[aria-selected="true"] {
+  color: var(--forest);
+  border-bottom-color: var(--forest);
+}
+.login-tab:hover:not([aria-selected="true"]) {
+  color: var(--ink);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.auth-note-proto {
+  margin-top: var(--s5);
+  padding: var(--s4);
+  background: var(--sand-light, #faf7f0);
+  border-radius: var(--radius-s);
+  font-size: var(--fs-tiny);
+  color: var(--text-muted);
+  border: 1px solid var(--line-soft, #e8e0d0);
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+  <div class="auth-wrap">
+    <div class="auth-side">
+      <div>
+        <span class="eyebrow" style="color: var(--gold);">Area Masuk</span>
+        <h2>Satu platform, dua peran: Pengrajin dan Konsumen.</h2>
+        <p style="color: rgba(245,240,230,0.75); max-width: 40ch;">Pengrajin mengelola etalase, harga, dan pembukuan. Konsumen menemukan batik asli langsung dari tangan pengrajin terverifikasi.</p>
+      </div>
+      <img src="assets/img/ruang-kerja.jpg" alt="Ruang kerja pengrajin batik Sungai Lemau (foto placeholder simulasi)">
+    </div>
+
+    <div class="auth-form-wrap">
+      <div class="auth-card">
+        <h1 style="font-size: 1.8rem; margin-bottom: var(--s2);">Masuk ke LemauGo.id</h1>
+        <p class="text-muted" style="margin-bottom: var(--s5);">Pilih jenis akun Anda untuk melanjutkan.</p>
+
+        <!-- Tab kontrol -->
+        <div class="login-tabs" role="tablist" aria-label="Jenis akun">
+          <button class="login-tab" id="tab-pengrajin" role="tab"
+                  aria-selected="true" aria-controls="panel-pengrajin">
+            Pengrajin
+          </button>
+          <button class="login-tab" id="tab-konsumen" role="tab"
+                  aria-selected="false" aria-controls="panel-konsumen">
+            Konsumen
+          </button>
+        </div>
+
+        <!-- Panel Pengrajin -->
+        <div class="tab-panel active" id="panel-pengrajin" role="tabpanel" aria-labelledby="tab-pengrajin">
+          <form id="form-pengrajin" novalidate>
+            <div class="field">
+              <label for="pgr-hp">Nomor telepon</label>
+              <input type="tel" id="pgr-hp" inputmode="tel" autocomplete="tel"
+                     placeholder="Contoh: 0813xxxxxxx" required>
+              <p class="error-msg" id="err-pgr-hp" hidden>Masukkan nomor telepon yang valid (dimulai 0, 10–13 angka).</p>
+            </div>
+            <div class="field">
+              <label for="pgr-pin">PIN (6 angka)</label>
+              <input type="password" id="pgr-pin" inputmode="numeric" maxlength="6"
+                     placeholder="••••••" required autocomplete="current-password">
+              <p class="hint">PIN sederhana dipilih agar mudah bagi pengrajin.</p>
+              <p class="error-msg" id="err-pgr-pin" hidden>PIN harus tepat 6 angka.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-pgr">
+              Masuk sebagai Pengrajin
+            </button>
+          </form>
+          <div class="auth-note" style="margin-top: var(--s4);">
+            <strong>Akun demo pengrajin:</strong> isi nomor telepon dan PIN 6 angka apa pun yang valid, lalu tekan Masuk. Anda akan masuk sebagai <em>Aminah Sari — Batik Aminah</em> (data simulasi).
+          </div>
+        </div>
+
+        <!-- Panel Konsumen -->
+        <div class="tab-panel" id="panel-konsumen" role="tabpanel" aria-labelledby="tab-konsumen">
+          <form id="form-konsumen" novalidate>
+            <div class="field">
+              <label for="kons-email">Email atau nomor telepon</label>
+              <input type="text" id="kons-email" inputmode="email" autocomplete="username"
+                     placeholder="Contoh: saya@email.com atau 0812xxxxxxx" required>
+              <p class="error-msg" id="err-kons-email" hidden>Masukkan email atau nomor telepon yang valid.</p>
+            </div>
+            <div class="field">
+              <label for="kons-pw">Kata sandi</label>
+              <input type="password" id="kons-pw" placeholder="Kata sandi Anda" required
+                     autocomplete="current-password" minlength="4">
+              <p class="hint">Untuk demo: masukkan kata sandi minimal 4 karakter.</p>
+              <p class="error-msg" id="err-kons-pw" hidden>Kata sandi minimal 4 karakter.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-kons">
+              Masuk sebagai Konsumen
+            </button>
+          </form>
+          <div class="auth-note" style="margin-top: var(--s4);">
+            <strong>Akun demo konsumen:</strong> isi email atau nomor telepon dan kata sandi minimal 4 karakter. Setelah masuk, Anda dapat menjelajahi situs seperti biasa.
+          </div>
+        </div>
+
+        <!-- Catatan prototipe -->
+        <div class="auth-note-proto">
+          Autentikasi pada prototipe ini hanya simulasi dan belum terhubung ke sistem backend. Tidak ada data pribadi yang disimpan secara permanen.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  SLGD.renderPublicHeader("./", null);
+
+  /* ── Tab switching ── */
+  var tabs = document.querySelectorAll(".login-tab");
+  var panels = document.querySelectorAll(".tab-panel");
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+      panels.forEach(function (p) { p.classList.remove("active"); });
+      tab.setAttribute("aria-selected", "true");
+      document.getElementById(tab.getAttribute("aria-controls")).classList.add("active");
+    });
+  });
+
+  /* ── Form Pengrajin ── */
+  document.getElementById("form-pengrajin").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var hp  = document.getElementById("pgr-hp");
+    var pin = document.getElementById("pgr-pin");
+    var okHp  = /^0\d{8,12}$/.test(hp.value.trim());
+    var okPin = /^\d{6}$/.test(pin.value.trim());
+    document.getElementById("err-pgr-hp").hidden  = okHp;
+    document.getElementById("err-pgr-pin").hidden = okPin;
+    hp.setAttribute("aria-invalid",  String(!okHp));
+    pin.setAttribute("aria-invalid", String(!okPin));
+    if (okHp && okPin) {
+      SLGD.toast("Berhasil masuk sebagai pengrajin (akun demo).");
+      setTimeout(function () { location.href = "dashboard/index.html"; }, 700);
+    }
+  });
+
+  /* ── Form Konsumen ── */
+  document.getElementById("form-konsumen").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("kons-email");
+    var pw    = document.getElementById("kons-pw");
+    var okEmail = email.value.trim().length >= 6;
+    var okPw    = pw.value.trim().length >= 4;
+    document.getElementById("err-kons-email").hidden = okEmail;
+    document.getElementById("err-kons-pw").hidden    = okPw;
+    email.setAttribute("aria-invalid", String(!okEmail));
+    pw.setAttribute("aria-invalid",    String(!okPw));
+    if (okEmail && okPw) {
+      /* Simpan nama konsumen di localStorage agar header menampilkan "Halo, Konsumen" */
+      var nama = email.value.trim().split("@")[0] || "Konsumen";
+      try { localStorage.setItem("lmg-konsumen-nama", nama); } catch (ex) {}
+      SLGD.toast("Berhasil masuk sebagai konsumen (akun demo).");
+      setTimeout(function () { location.href = "index.html"; }, 700);
+    }
+  });
+})();
+</script>
+</body>
+</html>

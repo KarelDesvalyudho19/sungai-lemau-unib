@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Rekomendasi Batik — LemauGo.id | Temukan Motif Terbaik untuk Anda</title>
+<meta name="description" content="Sistem rekomendasi cerdas LemauGo.id — jawab 2 pertanyaan singkat dan temukan motif Batik Sungai Lemau yang paling sesuai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root {
+  --maroon: #6B1F2A; --maroon-dark: #4E1520; --maroon-soft: #82253A;
+  --maroon-mist: #F9F0F2; --beige: #F5F0E6; --beige-warm: #EFE8D8;
+  --beige-deep: #E4D8C2; --gold-pale: #FDF6E9;
+}
+/* ---- HERO ---- */
+.ai-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 55%, #7D2436 100%);
+  color: var(--beige); padding: var(--s8) 0 var(--s9); overflow: hidden;
+}
+.ai-hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 85% 40%, rgba(195,154,82,0.16) 0%, transparent 65%),
+              radial-gradient(ellipse 45% 50% at 5% 90%, rgba(195,154,82,0.09) 0%, transparent 60%);
+}
+.ai-hero-pattern {
+  position: absolute; inset: 0; opacity: 0.045; pointer-events: none;
+  background-image: repeating-linear-gradient(45deg,var(--gold) 0,var(--gold) 1px,transparent 0,transparent 50%),
+                    repeating-linear-gradient(-45deg,var(--gold) 0,var(--gold) 1px,transparent 0,transparent 50%);
+  background-size: 28px 28px;
+}
+.ai-hero-ornament {
+  position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
+  width: 340px; height: 340px; opacity: 0.07; pointer-events: none;
+}
+.ai-hero-inner {
+  position: relative; z-index: 1; text-align: center;
+  max-width: 680px; margin: 0 auto; padding: 0 var(--s5);
+}
+.ai-hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(195,154,82,0.18); border: 1px solid rgba(195,154,82,0.4);
+  color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 6px 16px; border-radius: 999px; margin-bottom: var(--s5);
+}
+.badge-dot { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+.ai-hero h1 { font-family: var(--font-heading); font-size: clamp(2rem,5vw,3rem); color: var(--beige); margin-bottom: var(--s4); line-height: 1.1; }
+.ai-hero h1 em { color: var(--gold); font-style: normal; }
+.ai-hero-sub { font-size: var(--fs-base); color: rgba(245,240,230,0.78); max-width: 520px; margin: 0 auto var(--s6); line-height: 1.65; }
+/* Steps */
+.ai-steps-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-top: var(--s5); }
+.ai-step-node { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ai-step-circle {
+  width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(245,240,230,0.3);
+  background: rgba(245,240,230,0.08); color: rgba(245,240,230,0.5);
+  font-weight: 700; font-size: var(--fs-small); display: flex; align-items: center; justify-content: center;
+  transition: all .35s ease;
+}
+.ai-step-circle.active { border-color: var(--gold); background: var(--gold); color: var(--maroon-dark); }
+.ai-step-circle.done { border-color: rgba(245,240,230,0.6); background: rgba(245,240,230,0.18); color: var(--beige); }
+.ai-step-label { font-size: 11px; color: rgba(245,240,230,0.55); white-space: nowrap; transition: color .35s; }
+.ai-step-label.active { color: var(--gold); font-weight: 600; }
+.ai-step-label.done { color: rgba(245,240,230,0.75); }
+.ai-step-line { width: 60px; height: 2px; background: rgba(245,240,230,0.15); margin: 0 4px 22px; border-radius: 1px; transition: background .35s; }
+.ai-step-line.done { background: rgba(245,240,230,0.45); }
+/* ---- QUIZ ---- */
+.ai-quiz-wrap { background: var(--beige); min-height: 480px; padding: var(--s8) 0 var(--s9); }
+.ai-quiz-inner { max-width: 760px; margin: 0 auto; padding: 0 var(--s5); }
+.ai-question-card {
+  background: #fff; border: 1px solid var(--beige-deep); border-radius: 20px;
+  padding: var(--s7); box-shadow: 0 4px 32px rgba(107,31,42,0.07); animation: card-in 0.4s ease;
+}
+@keyframes card-in { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.ai-q-label { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--maroon); margin-bottom: var(--s4); display: flex; align-items: center; gap: 8px; }
+.ai-q-label-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--maroon); }
+.ai-q-text { font-family: var(--font-heading); font-size: clamp(1.35rem,3vw,1.8rem); font-weight: 700; color: var(--maroon-dark); margin-bottom: var(--s2); line-height: 1.2; }
+.ai-q-hint { font-size: var(--fs-small); color: var(--text-muted,#6E6A5E); margin-bottom: var(--s6); }
+.ai-choices { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); margin-bottom: var(--s6); }
+.ai-choice {
+  background: var(--beige); border: 2px solid var(--beige-deep); border-radius: 14px;
+  padding: var(--s4) var(--s5); cursor: pointer; display: flex; align-items: flex-start;
+  gap: var(--s3); transition: border-color .2s,background .2s,transform .15s; text-align: left;
+  position: relative; overflow: hidden;
+}
+.ai-choice::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(107,31,42,0.06) 0%,transparent 60%); opacity:0; transition:opacity .2s; }
+.ai-choice:hover { border-color: var(--maroon-soft); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(107,31,42,0.1); }
+.ai-choice:hover::before { opacity: 1; }
+.ai-choice.selected { border-color: var(--maroon); background: var(--maroon-mist); box-shadow: 0 4px 14px rgba(107,31,42,0.15); }
+.ai-choice.selected::before { opacity: 1; }
+.ai-choice-icon { width:44px; height:44px; border-radius:12px; background:var(--beige-deep); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; transition:background .2s; }
+.ai-choice.selected .ai-choice-icon { background: rgba(107,31,42,0.14); }
+.ai-choice-body { min-width: 0; }
+.ai-choice-title { font-weight: 700; font-size: var(--fs-base); color: var(--maroon-dark); margin-bottom: 3px; display: block; }
+.ai-choice-desc { font-size: 12px; color: var(--text-muted,#6E6A5E); line-height: 1.4; display: block; }
+.ai-choice-check { position:absolute; top:10px; right:10px; width:22px; height:22px; border-radius:50%; background:var(--maroon); color:#fff; display:none; align-items:center; justify-content:center; }
+.ai-choice.selected .ai-choice-check { display: flex; }
+.ai-nav { display:flex; align-items:center; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; }
+.ai-btn-back { background:none; border:1.5px solid var(--beige-deep); border-radius:8px; padding:10px 22px; font-size:var(--fs-small); font-weight:600; color:var(--text-muted,#6E6A5E); cursor:pointer; transition:border-color .2s,color .2s; }
+.ai-btn-back:hover { border-color: var(--maroon); color: var(--maroon); }
+.ai-btn-next { background:var(--maroon); border:none; border-radius:8px; padding:12px 32px; font-size:var(--fs-base); font-weight:700; color:var(--beige); cursor:pointer; display:flex; align-items:center; gap:10px; transition:background .2s,transform .15s; flex-shrink:0; }
+.ai-btn-next:hover { background: var(--maroon-soft); transform: translateY(-1px); }
+.ai-btn-next:disabled { background: var(--beige-deep); color: var(--text-muted,#aaa); cursor: not-allowed; transform: none; }
+/* ---- LOADING ---- */
+.ai-loading { display:none; flex-direction:column; align-items:center; justify-content:center; gap:var(--s5); padding:var(--s8) var(--s5); animation:card-in .3s ease; }
+.ai-loading.show { display: flex; }
+.ai-thinking-ring { width:72px; height:72px; border-radius:50%; border:3px solid var(--beige-deep); border-top-color:var(--maroon); animation:spin .9s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.ai-thinking-dots { display:flex; gap:8px; }
+.ai-thinking-dots span { width:8px; height:8px; border-radius:50%; background:var(--maroon); animation:dot-bounce 1.2s ease-in-out infinite; }
+.ai-thinking-dots span:nth-child(2){animation-delay:.2s} .ai-thinking-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot-bounce { 0%,80%,100%{transform:scale(.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
+.ai-thinking-text { font-family:var(--font-heading); font-size:1.2rem; color:var(--maroon); text-align:center; }
+.ai-thinking-sub { font-size:var(--fs-small); color:var(--text-muted,#6E6A5E); text-align:center; max-width:300px; }
+.ai-loading-bar-wrap { width:280px; height:4px; background:var(--beige-deep); border-radius:2px; overflow:hidden; }
+.ai-loading-bar { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--maroon),var(--gold)); animation:loading-fill 2s ease forwards; }
+@keyframes loading-fill { from{width:0%} to{width:100%} }
+/* ---- HASIL ---- */
+.ai-result-wrap { display:none; animation:card-in .5s ease; }
+.ai-result-wrap.show { display:block; }
+.ai-result-header { text-align:center; margin-bottom:var(--s6); }
+.ai-result-badge { display:inline-flex; align-items:center; gap:7px; background:rgba(107,31,42,0.08); border:1px solid rgba(107,31,42,0.2); color:var(--maroon); font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:5px 14px; border-radius:999px; margin-bottom:var(--s4); }
+.ai-result-title { font-family:var(--font-heading); font-size:clamp(1.5rem,4vw,2.2rem); color:var(--maroon-dark); margin-bottom:var(--s2); }
+.ai-result-context { font-size:var(--fs-small); color:var(--text-muted,#6E6A5E); }
+.ai-reko-card { background:#fff; border:2px solid var(--maroon); border-radius:20px; overflow:hidden; box-shadow:0 8px 40px rgba(107,31,42,0.12); margin-bottom:var(--s5); }
+.ai-reko-card-header { background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 100%); padding:var(--s6) var(--s7); display:flex; align-items:center; gap:var(--s5); position:relative; overflow:hidden; }
+.ai-reko-card-header::before { content:""; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(195,154,82,0.06) 0,rgba(195,154,82,0.06) 1px,transparent 0,transparent 50%); background-size:18px 18px; }
+.ai-reko-motif-icon { width:72px; height:72px; border-radius:16px; background:rgba(245,240,230,0.15); border:1.5px solid rgba(195,154,82,0.35); display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0; position:relative; z-index:1; }
+.ai-reko-card-header-text { position:relative; z-index:1; flex:1; min-width:0; }
+.ai-reko-label { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+.ai-reko-motif-name { font-family:var(--font-heading); font-size:clamp(1.3rem,3vw,1.9rem); color:var(--beige); font-weight:700; line-height:1.15; margin-bottom:6px; }
+.ai-reko-match-chip { display:inline-flex; align-items:center; gap:5px; background:rgba(195,154,82,0.22); border:1px solid rgba(195,154,82,0.4); color:var(--gold); font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; }
+.ai-reko-card-body { padding:var(--s6) var(--s7); }
+.ai-confidence { margin-bottom:var(--s6); }
+.ai-confidence-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.ai-confidence-label { font-size:12px; font-weight:700; color:var(--text-muted,#6E6A5E); text-transform:uppercase; letter-spacing:.06em; }
+.ai-confidence-val { font-weight:700; color:var(--maroon); font-variant-numeric:tabular-nums; }
+.ai-confidence-track { height:10px; background:var(--beige-deep); border-radius:5px; overflow:hidden; }
+.ai-confidence-fill { height:100%; border-radius:5px; background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft)); transition:width 1.2s cubic-bezier(0.2,0.8,0.3,1); width:0%; }
+.ai-reason-box { background:var(--maroon-mist); border-left:4px solid var(--maroon); border-radius:0 12px 12px 0; padding:var(--s4) var(--s5); margin-bottom:var(--s5); }
+.ai-reason-label { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--maroon); margin-bottom:var(--s2); display:flex; align-items:center; gap:6px; }
+.ai-reason-text { font-size:var(--fs-base); color:var(--maroon-dark); line-height:1.65; }
+.ai-attrs { display:flex; flex-wrap:wrap; gap:var(--s2); margin-bottom:var(--s5); }
+.ai-attr-tag { background:var(--gold-pale); border:1px solid rgba(195,154,82,0.3); color:#7A5820; font-size:12px; font-weight:600; padding:4px 12px; border-radius:999px; }
+.ai-prod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s3); margin-bottom:var(--s2); }
+.ai-prod-card { background:var(--beige); border:1.5px solid var(--beige-deep); border-radius:14px; padding:var(--s4); text-decoration:none; transition:border-color .2s,box-shadow .2s,transform .15s; display:block; }
+.ai-prod-card:hover { border-color:var(--maroon); box-shadow:0 4px 14px rgba(107,31,42,0.1); transform:translateY(-2px); }
+.ai-prod-emoji { font-size:28px; margin-bottom:8px; display:block; }
+.ai-prod-name { font-size:var(--fs-small); font-weight:700; color:var(--maroon-dark); margin-bottom:3px; line-height:1.3; display:block; }
+.ai-prod-type { font-size:11px; color:var(--text-muted,#6E6A5E); margin-bottom:6px; display:block; }
+.ai-prod-price { font-size:var(--fs-small); font-weight:700; color:var(--maroon); display:block; }
+.ai-result-actions { display:flex; gap:var(--s3); flex-wrap:wrap; margin-top:var(--s5); }
+.ai-btn-primary { background:var(--maroon); color:var(--beige); border:none; border-radius:8px; padding:12px 28px; font-size:var(--fs-base); font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:background .2s,transform .15s; }
+.ai-btn-primary:hover { background:var(--maroon-soft); transform:translateY(-1px); }
+.ai-btn-outline { background:#fff; color:var(--maroon); border:2px solid var(--maroon); border-radius:8px; padding:10px 24px; font-size:var(--fs-base); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:background .2s; }
+.ai-btn-outline:hover { background:var(--maroon-mist); }
+.ai-alt-section { margin-top:var(--s7); }
+.ai-alt-title { font-family:var(--font-heading); font-size:1.2rem; color:var(--maroon-dark); margin-bottom:var(--s4); display:flex; align-items:center; gap:10px; }
+.ai-alt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s3); }
+.ai-alt-card { background:#fff; border:1.5px solid var(--beige-deep); border-radius:14px; padding:var(--s4) var(--s5); cursor:pointer; transition:border-color .2s,box-shadow .2s; }
+.ai-alt-card:hover { border-color:var(--maroon-soft); box-shadow:0 3px 12px rgba(107,31,42,0.08); }
+.ai-alt-card-motif { font-size:24px; margin-bottom:6px; }
+.ai-alt-card-name { font-weight:700; font-size:var(--fs-small); color:var(--maroon-dark); margin-bottom:4px; }
+.ai-alt-card-score { font-size:11px; color:var(--text-muted,#6E6A5E); }
+.ai-alt-bar { height:4px; background:var(--beige-deep); border-radius:2px; margin-top:6px; overflow:hidden; }
+.ai-alt-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft)); }
+/* ---- HOW IT WORKS ---- */
+.ai-about { background:var(--beige-warm); padding:var(--s7) 0; border-top:1px solid var(--beige-deep); }
+.ai-about-inner { max-width:760px; margin:0 auto; padding:0 var(--s5); display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--s5); }
+.ai-about-item { text-align:center; }
+.ai-about-icon { width:48px; height:48px; border-radius:14px; background:rgba(107,31,42,0.09); color:var(--maroon); display:flex; align-items:center; justify-content:center; margin:0 auto var(--s3); }
+.ai-about-item strong { display:block; font-size:var(--fs-base); color:var(--maroon-dark); margin-bottom:4px; }
+.ai-about-item p { font-size:12px; color:var(--text-muted,#6E6A5E); margin:0; line-height:1.5; }
+@media(max-width:640px){ .ai-choices,.ai-prod-grid,.ai-alt-grid{ grid-template-columns:1fr } .ai-reko-card-header{flex-direction:column;align-items:flex-start} .ai-reko-card-body{padding:var(--s5)} .ai-about-inner{grid-template-columns:1fr} .ai-steps-bar .ai-step-line{width:36px} }
+@media(min-width:641px) and (max-width:900px){ .ai-prod-grid,.ai-alt-grid{ grid-template-columns:1fr 1fr } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+
+  <section class="ai-hero" aria-label="AI Rekomendasi Batik Sungai Lemau">
+    <div class="ai-hero-pattern" aria-hidden="true"></div>
+    <svg class="ai-hero-ornament" viewBox="0 0 340 340" aria-hidden="true" fill="none">
+      <circle cx="170" cy="170" r="140" stroke="white" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <circle cx="170" cy="170" r="100" stroke="white" stroke-width="1"/>
+      <circle cx="170" cy="170" r="60" stroke="white" stroke-width="1.5"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(0 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(45 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(90 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(135 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(180 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(225 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(270 170 170)"/>
+      <ellipse cx="170" cy="50" rx="28" ry="48" fill="white" transform="rotate(315 170 170)"/>
+      <circle cx="170" cy="170" r="28" fill="white"/>
+    </svg>
+    <div class="ai-hero-inner">
+      <div class="ai-hero-badge"><span class="badge-dot" aria-hidden="true"></span>AI Cultural Commerce</div>
+      <h1>Temukan Motif <em>Batik</em> yang Tepat</h1>
+      <p class="ai-hero-sub">Sistem rekomendasi cerdas berbasis kearifan budaya Bengkulu. Jawab dua pertanyaan singkat dan dapatkan rekomendasi motif Batik Sungai Lemau terbaik untuk Anda.</p>
+      <div class="ai-steps-bar" id="steps-bar" aria-label="Langkah panduan">
+        <div class="ai-step-node"><div class="ai-step-circle active" id="step-circle-1">1</div><span class="ai-step-label active" id="step-label-1">Acara</span></div>
+        <div class="ai-step-line" id="step-line-1"></div>
+        <div class="ai-step-node"><div class="ai-step-circle" id="step-circle-2">2</div><span class="ai-step-label" id="step-label-2">Preferensi</span></div>
+        <div class="ai-step-line" id="step-line-2"></div>
+        <div class="ai-step-node"><div class="ai-step-circle" id="step-circle-3">&#10003;</div><span class="ai-step-label" id="step-label-3">Hasil</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-quiz-wrap" aria-live="polite">
+    <div class="ai-quiz-inner">
+
+      <!-- LANGKAH 1 -->
+      <div id="step-1" class="ai-question-card">
+        <div class="ai-q-label"><span class="ai-q-label-dot" aria-hidden="true"></span>Langkah 1 dari 2</div>
+        <h2 class="ai-q-text">Untuk acara apa batik ini akan digunakan?</h2>
+        <p class="ai-q-hint">Pilih satu pilihan yang paling sesuai dengan kebutuhan Anda.</p>
+        <div class="ai-choices" role="group" aria-label="Pilihan acara">
+          <button class="ai-choice" id="c-formal" data-val="formal" onclick="APP.pilihAcara(this)" aria-pressed="false">
+            <span class="ai-choice-icon" aria-hidden="true">&#127963;</span>
+            <span class="ai-choice-body"><span class="ai-choice-title">Formal</span><span class="ai-choice-desc">Rapat, seminar, acara resmi kantor, atau pertemuan pemerintahan</span></span>
+            <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </button>
+          <button class="ai-choice" id="c-santai" data-val="santai" onclick="APP.pilihAcara(this)" aria-pressed="false">
+            <span class="ai-choice-icon" aria-hidden="true">&#9728;</span>
+            <span class="ai-choice-body"><span class="ai-choice-title">Santai</span><span class="ai-choice-desc">Jalan-jalan, liburan, pertemuan keluarga, atau penggunaan sehari-hari</span></span>
+            <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </button>
+          <button class="ai-choice" id="c-pernikahan" data-val="pernikahan" onclick="APP.pilihAcara(this)" aria-pressed="false">
+            <span class="ai-choice-icon" aria-hidden="true">&#128141;</span>
+            <span class="ai-choice-body"><span class="ai-choice-title">Pernikahan</span><span class="ai-choice-desc">Resepsi pernikahan, lamaran, acara adat, atau prosesi budaya</span></span>
+            <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </button>
+          <button class="ai-choice" id="c-hadiah" data-val="hadiah" onclick="APP.pilihAcara(this)" aria-pressed="false">
+            <span class="ai-choice-icon" aria-hidden="true">&#127873;</span>
+            <span class="ai-choice-body"><span class="ai-choice-title">Hadiah</span><span class="ai-choice-desc">Cinderamata, oleh-oleh khas Bengkulu, atau hadiah istimewa</span></span>
+            <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </button>
+        </div>
+        <div class="ai-nav">
+          <span></span>
+          <button class="ai-btn-next" id="btn-next-1" onclick="APP.keStep2()" disabled>
+            Lanjut
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- LANGKAH 2 -->
+      <div id="step-2" style="display:none;">
+        <div class="ai-question-card">
+          <div class="ai-q-label"><span class="ai-q-label-dot" aria-hidden="true"></span>Langkah 2 dari 2</div>
+          <h2 class="ai-q-text">Motif seperti apa yang Anda sukai?</h2>
+          <p class="ai-q-hint">Pilih karakter visual yang paling mewakili selera estetika Anda.</p>
+          <div class="ai-choices" role="group" aria-label="Pilihan preferensi motif">
+            <button class="ai-choice" id="c-alam" data-val="alam" onclick="APP.pilihMotif(this)" aria-pressed="false">
+              <span class="ai-choice-icon" aria-hidden="true">&#127807;</span>
+              <span class="ai-choice-body"><span class="ai-choice-title">Alam</span><span class="ai-choice-desc">Terinspirasi flora, sungai, bukit — menyatu dengan alam Bengkulu</span></span>
+              <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            </button>
+            <button class="ai-choice" id="c-tradisional" data-val="tradisional" onclick="APP.pilihMotif(this)" aria-pressed="false">
+              <span class="ai-choice-icon" aria-hidden="true">&#127994;</span>
+              <span class="ai-choice-body"><span class="ai-choice-title">Tradisional</span><span class="ai-choice-desc">Kaya warisan budaya, pola adat, nilai filosofi leluhur Bengkulu</span></span>
+              <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            </button>
+            <button class="ai-choice" id="c-elegan" data-val="elegan" onclick="APP.pilihMotif(this)" aria-pressed="false">
+              <span class="ai-choice-icon" aria-hidden="true">&#10024;</span>
+              <span class="ai-choice-body"><span class="ai-choice-title">Elegan</span><span class="ai-choice-desc">Garis bersih, komposisi rapi, terkesan mewah dan berkelas</span></span>
+              <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            </button>
+            <button class="ai-choice" id="c-modern" data-val="modern" onclick="APP.pilihMotif(this)" aria-pressed="false">
+              <span class="ai-choice-icon" aria-hidden="true">&#127912;</span>
+              <span class="ai-choice-body"><span class="ai-choice-title">Modern</span><span class="ai-choice-desc">Pola kontemporer, warna segar, cocok untuk gaya hidup urban</span></span>
+              <span class="ai-choice-check" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            </button>
+          </div>
+          <div class="ai-nav">
+            <button class="ai-btn-back" onclick="APP.kembaliStep1()">← Kembali</button>
+            <button class="ai-btn-next" id="btn-next-2" onclick="APP.prosesRekomendasi()" disabled>
+              Analisis AI
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div class="ai-loading" id="ai-loading" role="status">
+        <div class="ai-thinking-ring" aria-hidden="true"></div>
+        <div class="ai-thinking-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="ai-thinking-text">AI sedang menganalisis&hellip;</div>
+        <div class="ai-thinking-sub">Mencocokkan preferensi Anda dengan database motif Batik Sungai Lemau</div>
+        <div class="ai-loading-bar-wrap" aria-hidden="true"><div class="ai-loading-bar" id="loading-bar"></div></div>
+      </div>
+
+      <!-- HASIL -->
+      <div class="ai-result-wrap" id="ai-result">
+        <div class="ai-result-header">
+          <div class="ai-result-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            Analisis Selesai
+          </div>
+          <h2 class="ai-result-title" id="result-headline">Rekomendasi untuk Anda</h2>
+          <p class="ai-result-context" id="result-context"></p>
+        </div>
+        <div class="ai-reko-card">
+          <div class="ai-reko-card-header">
+            <div class="ai-reko-motif-icon" id="result-icon" aria-hidden="true">&#127802;</div>
+            <div class="ai-reko-card-header-text">
+              <div class="ai-reko-label">Rekomendasi Utama</div>
+              <div class="ai-reko-motif-name" id="result-motif-name">Motif Bunga Rafflesia</div>
+              <div class="ai-reko-match-chip" id="result-match-chip">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                Kecocokan tinggi
+              </div>
+            </div>
+          </div>
+          <div class="ai-reko-card-body">
+            <div class="ai-confidence">
+              <div class="ai-confidence-header">
+                <span class="ai-confidence-label">Tingkat Kecocokan</span>
+                <span class="ai-confidence-val" id="result-conf-val">92%</span>
+              </div>
+              <div class="ai-confidence-track"><div class="ai-confidence-fill" id="result-conf-bar"></div></div>
+            </div>
+            <div class="ai-reason-box">
+              <div class="ai-reason-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+                Alasan Rekomendasi
+              </div>
+              <p class="ai-reason-text" id="result-reason"></p>
+            </div>
+            <div class="ai-attrs" id="result-attrs"></div>
+            <div style="margin-bottom:var(--s4)">
+              <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--s3)">Produk dengan motif ini</div>
+              <div class="ai-prod-grid" id="result-products"></div>
+            </div>
+            <div class="ai-result-actions">
+              <a href="jelajahi.html" class="ai-btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+                Lihat Semua Produk
+              </a>
+              <button class="ai-btn-outline" onclick="APP.ulangi()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Coba Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ai-alt-section">
+          <div class="ai-alt-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v-4M12 17V9M17 13V6"/></svg>
+            Alternatif Rekomendasi
+          </div>
+          <div class="ai-alt-grid" id="result-alts"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="ai-about" aria-label="Cara kerja sistem rekomendasi">
+    <div class="ai-about-inner">
+      <div class="ai-about-item">
+        <div class="ai-about-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M20 17v5H6.5A2.5 2.5 0 0 1 4 19.5"/></svg></div>
+        <strong>Berbasis Budaya Lokal</strong>
+        <p>Aturan rekomendasi disusun berdasarkan dokumentasi motif Batik Sungai Lemau dan nilai budaya Bengkulu</p>
+      </div>
+      <div class="ai-about-item">
+        <div class="ai-about-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <strong>Rule-Based AI</strong>
+        <p>Sistem menggunakan logika berbasis aturan yang transparan — tidak ada data pribadi yang disimpan</p>
+      </div>
+      <div class="ai-about-item">
+        <div class="ai-about-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.4 2.9-5.5 6.5-5.5s6.5 2.1 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 15c2 .8 3 2.4 3 5"/></svg></div>
+        <strong>Mendukung Pengrajin</strong>
+        <p>Setiap rekomendasi terhubung langsung ke produk nyata dari pengrajin Batik Sungai Lemau terverifikasi</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div id="site-footer"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP = (function () {
+  "use strict";
+  SLGD.renderPublicHeader("ai-rekomendasi");
+  SLGD.renderPublicFooter();
+
+  var state = { acara: null, motif: null };
+
+  /* -------- KNOWLEDGE BASE (Rule-Based AI) -------- */
+  var DB = [
+    {
+      id:"rafflesia", nama:"Motif Bunga Rafflesia", icon:"&#127802;",
+      attrs:["Flora Ikonik Bengkulu","Nilai Budaya Tinggi","Identitas Daerah","Batik Tulis"],
+      produkMotif:"Rafflesia",
+      skor:{ formal:{alam:82,tradisional:88,elegan:95,modern:70}, santai:{alam:78,tradisional:72,elegan:68,modern:80}, pernikahan:{alam:80,tradisional:92,elegan:96,modern:65}, hadiah:{alam:85,tradisional:90,elegan:88,modern:75} },
+      alasan:{
+        formal:{alam:"Rafflesia sebagai flora khas Bengkulu membawa kebanggaan lokal yang tepat untuk suasana formal, mencerminkan identitas budaya yang kuat.",tradisional:"Motif Rafflesia merupakan simbol tradisional tertinggi Bengkulu. Nilai budayanya sangat mengesankan dalam acara-acara resmi dan pertemuan penting.",elegan:"Komposisi motif Rafflesia yang megah dan detail menghadirkan kesan elegan dan berkelas — pilihan ideal untuk acara formal bergaya tinggi.",modern:"Reinterpretasi modern motif Rafflesia mempertemukan warisan budaya dengan estetika kontemporer dalam balutan profesional."},
+        santai:{alam:"Motif Rafflesia yang terinspirasi alam liar Bengkulu memberikan nuansa segar dan menyatu dengan lingkungan, cocok untuk aktivitas santai outdoor.",tradisional:"Kecantikan tradisional Rafflesia menjadi percakapan menarik saat digunakan dalam suasana santai bersama keluarga maupun komunitas.",elegan:"Bawakan kesan elegan yang lebih santai dengan motif Rafflesia — tampil memukau tanpa terkesan terlalu formal.",modern:"Perpaduan Rafflesia dan gaya modern menciptakan tampilan kasual yang unik dan berkarakter untuk kegiatan sehari-hari."},
+        pernikahan:{alam:"Rafflesia sebagai 'bunga' yang mekar melambangkan keindahan dan kesuburan — sangat simbolis untuk momen pernikahan yang sakral.",tradisional:"Dalam tradisi Bengkulu, Rafflesia merupakan simbol keagungan yang sangat bermakna dalam prosesi adat pernikahan.",elegan:"Motif Rafflesia memancarkan kemewahan dan keanggunan yang setara dengan momen pernikahan — elegan, berkesan, dan tak terlupakan.",modern:"Sentuhan modern pada motif Rafflesia menciptakan tampilan pernikahan yang kekinian namun tetap berakar pada budaya Bengkulu."},
+        hadiah:{alam:"Batik bermotif Rafflesia adalah hadiah unik yang membawa sepotong alam dan budaya Bengkulu — kenangan yang tak ternilai.",tradisional:"Memberikan motif Rafflesia sebagai hadiah berarti berbagi kekayaan budaya Bengkulu yang autentik dan bernilai tinggi.",elegan:"Keeleganan motif Rafflesia menjadikannya hadiah premium yang sempurna untuk orang-orang istimewa dalam hidup Anda.",modern:"Motif Rafflesia dalam sentuhan modern menjadi hadiah yang stylish dan bercerita — pilihan cinderamata Bengkulu terbaik."}
+      }
+    },
+    {
+      id:"sungai", nama:"Motif Sungai Mengalir", icon:"&#127754;",
+      attrs:["Filosofi Air","Ketenangan dan Kedamaian","Batik Tulis & Cap","Ikon Sungai Lemau"],
+      produkMotif:"Sungai Mengalir",
+      skor:{ formal:{alam:88,tradisional:80,elegan:75,modern:82}, santai:{alam:95,tradisional:78,elegan:70,modern:85}, pernikahan:{alam:85,tradisional:82,elegan:78,modern:72}, hadiah:{alam:90,tradisional:80,elegan:72,modern:82} },
+      alasan:{
+        formal:{alam:"Motif Sungai Mengalir menggambarkan kontinuitas dan ketekunan — nilai yang sangat relevan dalam konteks formal dan profesional.",tradisional:"Aliran sungai dalam filosofi Bengkulu melambangkan kebijaksanaan yang mengalir dari generasi ke generasi, cocok untuk suasana formal bernuansa adat.",elegan:"Garis lengkung yang elegan dari motif Sungai Mengalir menciptakan tampilan sofistikated untuk pertemuan formal.",modern:"Interpretasi modern dari motif sungai menghasilkan desain dinamis yang kuat untuk tampilan formal era kini."},
+        santai:{alam:"Tidak ada motif yang lebih sempurna menggambarkan ketenangan alam daripada Sungai Mengalir — ideal untuk petualangan santai di alam terbuka Bengkulu.",tradisional:"Motif sungai yang mengalir memberikan ketenangan khas pedesaan Bengkulu saat dikenakan dalam suasana santai bersama keluarga.",elegan:"Keanggunan garis-garis aliran sungai yang halus cocok untuk tampilan kasual yang tetap terlihat terurus dan stylish.",modern:"Pola sungai modern yang dinamis sangat cocok untuk gaya hidup aktif dan santai di era kontemporer."},
+        pernikahan:{alam:"Sungai melambangkan perjalanan hidup bersama yang mengalir terus — makna yang sangat dalam dan indah untuk hari pernikahan.",tradisional:"Dalam tradisi Sungai Lemau, air adalah sumber kehidupan. Motif ini membawa berkah dan harapan untuk kehidupan pernikahan yang lancar.",elegan:"Aliran garis yang anggun menciptakan tampilan pernikahan yang tenang, elegan, dan penuh simbolisme kebersamaan.",modern:"Motif sungai kontemporer menawarkan perspektif segar tentang pernikahan modern yang tetap terhubung dengan akar budaya."},
+        hadiah:{alam:"Motif Sungai Mengalir adalah hadiah yang membawa cerita alam Bengkulu — sebuah kenangan tentang keindahan sungai yang mengalir.",tradisional:"Memberikan motif ini sebagai hadiah berarti berbagi filosofi leluhur tentang kehidupan yang mengalir dengan indah.",elegan:"Keeleganan halus motif sungai menjadikannya hadiah yang bercita rasa tinggi untuk penerima yang menghargai kehalusan.",modern:"Desain sungai modern dalam batik menjadi hadiah yang unik dan bercerita tentang warisan budaya Sungai Lemau."}
+      }
+    },
+    {
+      id:"gunung", nama:"Motif Gunung Bungkuk", icon:"&#9968;",
+      attrs:["Landmark Alam Bengkulu","Keteguhan dan Kekuatan","Motif Populer #1","Batik Tulis Premium"],
+      produkMotif:"Gunung Bungkuk",
+      skor:{ formal:{alam:90,tradisional:85,elegan:80,modern:75}, santai:{alam:85,tradisional:75,elegan:65,modern:78}, pernikahan:{alam:78,tradisional:88,elegan:82,modern:68}, hadiah:{alam:92,tradisional:86,elegan:78,modern:72} },
+      alasan:{
+        formal:{alam:"Kekokohan Gunung Bungkuk mencerminkan keteguhan dan kepercayaan diri — karakter ideal untuk suasana formal yang berkesan.",tradisional:"Gunung Bungkuk adalah ikon alam Bengkulu yang paling dikenal. Kehadirannya dalam acara formal membawa kebanggaan daerah yang kuat.",elegan:"Siluet gunung yang bersih dan geometris menciptakan tampilan formal yang elegan dan berkarakter kuat.",modern:"Interpretasi modern dari landmark alam ini menghasilkan identitas visual yang kuat dan kontemporer untuk acara formal."},
+        santai:{alam:"Bagi pecinta alam, motif Gunung Bungkuk adalah cerminan jiwa petualang dan kecintaan terhadap alam Bengkulu.",tradisional:"Nuansa perbukitan yang khas membawa ketenangan alam pedesaan Bengkulu saat dikenakan dalam suasana santai.",elegan:"Motif gunung yang bersih memberikan tampilan kasual yang rapi dan terorganisir.",modern:"Garis-garis tegas gunung dalam interpretasi modern sangat cocok untuk gaya hidup outdoor aktif."},
+        pernikahan:{alam:"Gunung sebagai simbol keabadian dan keteguhan menjadi makna yang indah untuk komitmen pernikahan yang kokoh.",tradisional:"Dalam adat Bengkulu, gunung melambangkan perlindungan dan keteguhan keluarga — sangat bermakna untuk prosesi pernikahan.",elegan:"Komposisi siluet gunung yang megah menghadirkan kesan pernikahan yang berkesan dan penuh simbolisme alam.",modern:"Reinterpretasi gunung yang modern menciptakan tampilan pernikahan yang unik dengan kedalaman makna budaya."},
+        hadiah:{alam:"Hadiah terbaik bagi pecinta alam Bengkulu — motif Gunung Bungkuk membawa sebagian jiwa alam ke tangan penerima.",tradisional:"Hadiah bermotif Gunung Bungkuk adalah sepotong identitas Bengkulu yang autentik dan tak ternilai.",elegan:"Keindahan sederhana motif gunung menjadikannya hadiah yang berselera tinggi dan bermakna mendalam.",modern:"Motif gunung bergaya modern adalah hadiah cinderamata Bengkulu yang berbeda dan berkarakter."}
+      }
+    },
+    {
+      id:"liku", nama:"Motif Liku Sembilan", icon:"&#127744;",
+      attrs:["Simbolisme Filosofis","Kesabaran dan Kearifan","Warisan Adat Bengkulu","Batik Kombinasi"],
+      produkMotif:"Liku Sembilan",
+      skor:{ formal:{alam:75,tradisional:92,elegan:85,modern:68}, santai:{alam:72,tradisional:80,elegan:75,modern:70}, pernikahan:{alam:80,tradisional:96,elegan:88,modern:65}, hadiah:{alam:78,tradisional:94,elegan:85,modern:68} },
+      alasan:{
+        formal:{alam:"Filosofi perjalanan dalam Liku Sembilan mencerminkan ketabahan dan adaptasi — nilai yang relevan dalam konteks profesional.",tradisional:"Liku Sembilan adalah motif dengan kedalaman filosofis tertinggi dalam budaya Bengkulu. Kehadirannya sangat bermartabat di acara formal.",elegan:"Pola meander yang anggun dari Liku Sembilan menghadirkan keeleganan geometris yang tak lekang oleh waktu.",modern:"Interpretasi modern dari pola liku-liku menciptakan desain yang dinamis dan menarik perhatian dalam suasana formal."},
+        santai:{alam:"Pola jalan yang berkelok menggambarkan perjalanan santai menyusuri alam Bengkulu yang penuh kejutan indah.",tradisional:"Kekayaan filosofi Liku Sembilan menjadi pembuka percakapan menarik tentang budaya Bengkulu dalam suasana santai.",elegan:"Liku sembilan dalam suasana santai tetap mempertahankan kelas dan kehalusan taste yang tinggi.",modern:"Pola liku yang dinamis memberikan energi dan gerakan pada tampilan kasual yang lebih hidup."},
+        pernikahan:{alam:"Sembilan liku melambangkan perjalanan panjang yang ditempuh bersama — metafora pernikahan yang sangat dalam dan puitis.",tradisional:"Dalam tradisi adat Bengkulu, Liku Sembilan merupakan motif paling bermakna untuk pernikahan — simbol kesabaran membangun keluarga.",elegan:"Keanggunan pola geometris Liku Sembilan menciptakan tampilan pernikahan yang sophisticated dan penuh makna.",modern:"Penafsiran segar dari motif klasik ini menghasilkan pernikahan modern yang tetap berakar pada nilai budaya yang kuat."},
+        hadiah:{alam:"Filosofi perjalanan dalam Liku Sembilan menjadikannya hadiah bermakna untuk seseorang yang sedang menempuh babak baru kehidupan.",tradisional:"Tidak ada hadiah yang lebih dalam maknanya dari Liku Sembilan — sebuah pesan filosofis yang diwujudkan dalam karya seni.",elegan:"Hadiah dengan motif Liku Sembilan menunjukkan selera tinggi dan perhatian khusus yang sangat berkesan bagi penerimanya.",modern:"Reinterpretasi modern Liku Sembilan menjadi hadiah filosofis yang kontemporer dan berkarakter."}
+      }
+    },
+    {
+      id:"riak", nama:"Motif Riak Air", icon:"&#128167;",
+      attrs:["Kabar Baik Menyebar","Kesederhanaan Bermakna","Batik Tulis Halus","Filosofi Air Bengkulu"],
+      produkMotif:"Riak Air",
+      skor:{ formal:{alam:78,tradisional:75,elegan:82,modern:85}, santai:{alam:88,tradisional:72,elegan:75,modern:90}, pernikahan:{alam:82,tradisional:78,elegan:80,modern:85}, hadiah:{alam:85,tradisional:76,elegan:78,modern:88} },
+      alasan:{
+        formal:{alam:"Riak air yang melambangkan ketenangan dan keseimbangan sangat cocok untuk tampilan formal yang profesional namun tetap membumi.",tradisional:"Filosofi sederhana di balik riak air — bahwa hal kecil dapat berdampak besar — sangat relevan dalam konteks kepemimpinan formal.",elegan:"Pola riak yang berulang dan ritmis menciptakan keeleganan geometris yang diskret dan berkelas untuk acara formal.",modern:"Abstraksi riak air dalam sentuhan modern menghasilkan desain formal yang bersih, minimalis, dan berkarakter kuat."},
+        santai:{alam:"Riak air menggambarkan ketenangan sungai Bengkulu yang sempurna untuk suasana santai yang membumi dan damai.",tradisional:"Kesederhanaan filosofis riak air menjadi percakapan budaya yang hangat dalam suasana santai bersama orang-orang tersayang.",elegan:"Tampilan santai yang tetap elegan — itulah yang ditawarkan motif Riak Air dengan polanya yang halus dan menenangkan.",modern:"Pola riak kontemporer sangat cocok untuk gaya hidup santai urban yang dinamis dan penuh warna."},
+        pernikahan:{alam:"Riak kebaikan yang menyebar dari momen pernikahan ke seluruh keluarga dan masyarakat — makna yang sangat indah untuk hari istimewa.",tradisional:"Simbolisme riak air sebagai pembawa kabar baik sangat tepat untuk mengawali babak baru kehidupan pernikahan.",elegan:"Pola riak yang halus dan ritmis menciptakan tampilan pernikahan yang anggun dan bersahaja.",modern:"Motif Riak Air dalam interpretasi modern memberikan tampilan pernikahan yang segar, ringan, dan penuh harapan."},
+        hadiah:{alam:"Hadiah bermotif Riak Air menyiratkan doa agar kebaikan terus menyebar dari penerimanya — pesan yang tulus dan bermakna.",tradisional:"Filosofi riak yang menyebar mencerminkan harapan akan pengaruh positif yang dimulai dari satu titik kecil — hadiah penuh doa.",elegan:"Kehalusan pola riak menjadikannya hadiah yang diskret namun berkesan bagi mereka yang menghargai seni halus.",modern:"Hadiah motif Riak Air modern adalah pernyataan gaya yang unik dengan kedalaman makna budaya Bengkulu."}
+      }
+    }
+  ];
+
+  var ACARA_LABEL  = { formal:"Acara Formal", santai:"Penggunaan Santai", pernikahan:"Pernikahan & Adat", hadiah:"Hadiah & Cinderamata" };
+  var MOTIF_LABEL  = { alam:"Motif Alam", tradisional:"Motif Tradisional", elegan:"Motif Elegan", modern:"Motif Modern" };
+  var EMOJI_PRODUK = { "Kain":"&#129523;", "Selendang":"&#129507;", "Kemeja":"&#128084;", "Tote Bag":"&#128092;" };
+
+  function hitung(acara, pref) {
+    return DB.map(function(m){ return { motif:m, skor:m.skor[acara][pref] }; })
+             .sort(function(a,b){ return b.skor - a.skor; });
+  }
+
+  function getProduks(namaMotif) {
+    return SLGD.DATA.products.filter(function(p){ return p.motif === namaMotif && p.stok !== "Habis"; }).slice(0,3);
+  }
+
+  function setStep(n) {
+    [1,2,3].forEach(function(i){
+      var c=document.getElementById("step-circle-"+i), l=document.getElementById("step-label-"+i);
+      c.className = "ai-step-circle" + (i<n?" done":i===n?" active":"");
+      l.className = "ai-step-label" + (i<n?" done":i===n?" active":"");
+    });
+    [1,2].forEach(function(i){
+      var line=document.getElementById("step-line-"+i);
+      if(line) line.className = "ai-step-line" + (i<n?" done":"");
+    });
+  }
+
+  function pilihAcara(el) {
+    document.querySelectorAll("#step-1 .ai-choice").forEach(function(b){ b.classList.remove("selected"); b.setAttribute("aria-pressed","false"); });
+    el.classList.add("selected"); el.setAttribute("aria-pressed","true");
+    state.acara = el.dataset.val;
+    document.getElementById("btn-next-1").disabled = false;
+  }
+
+  function pilihMotif(el) {
+    document.querySelectorAll("#step-2 .ai-choice").forEach(function(b){ b.classList.remove("selected"); b.setAttribute("aria-pressed","false"); });
+    el.classList.add("selected"); el.setAttribute("aria-pressed","true");
+    state.motif = el.dataset.val;
+    document.getElementById("btn-next-2").disabled = false;
+  }
+
+  function keStep2() {
+    if(!state.acara) return;
+    document.getElementById("step-1").style.display = "none";
+    document.getElementById("step-2").style.display = "block";
+    setStep(2);
+  }
+
+  function kembaliStep1() {
+    document.getElementById("step-2").style.display = "none";
+    document.getElementById("step-1").style.display = "block";
+    setStep(1);
+  }
+
+  function prosesRekomendasi() {
+    if(!state.acara || !state.motif) return;
+    document.getElementById("step-2").style.display = "none";
+    var load = document.getElementById("ai-loading");
+    load.classList.add("show");
+    setStep(3);
+    var bar = document.getElementById("loading-bar");
+    bar.style.animation = "none"; bar.offsetHeight;
+    bar.style.animation = "loading-fill 2s ease forwards";
+    setTimeout(function(){
+      load.classList.remove("show");
+      tampilkanHasil(state.acara, state.motif);
+    }, 2100);
+  }
+
+  function tampilkanHasil(acara, pref) {
+    var ranked = hitung(acara, pref);
+    var top = ranked[0], alts = ranked.slice(1,4);
+    var produks = getProduks(top.motif.produkMotif);
+
+    document.getElementById("result-headline").textContent = "Rekomendasi: " + top.motif.nama;
+    document.getElementById("result-context").textContent = ACARA_LABEL[acara] + " × " + MOTIF_LABEL[pref] + " — " + top.skor + "% kecocokan";
+    document.getElementById("result-icon").innerHTML = top.motif.icon;
+    document.getElementById("result-motif-name").textContent = top.motif.nama;
+    document.getElementById("result-match-chip").innerHTML =
+      '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> ' +
+      (top.skor >= 90 ? "Kecocokan sangat tinggi" : top.skor >= 80 ? "Kecocokan tinggi" : "Kecocokan baik");
+    document.getElementById("result-conf-val").textContent = top.skor + "%";
+    var confBar = document.getElementById("result-conf-bar");
+    confBar.style.width = "0%";
+    document.getElementById("result-reason").textContent = top.motif.alasan[acara][pref];
+    document.getElementById("result-attrs").innerHTML = top.motif.attrs.map(function(a){ return '<span class="ai-attr-tag">&#10022; ' + a + '</span>'; }).join("");
+
+    if(produks.length > 0) {
+      document.getElementById("result-products").innerHTML = produks.map(function(p){
+        return '<a class="ai-prod-card" href="jelajahi.html">' +
+          '<span class="ai-prod-emoji">' + (EMOJI_PRODUK[p.jenis]||"&#127873;") + '</span>' +
+          '<span class="ai-prod-name">' + SLGD.esc(p.nama) + '</span>' +
+          '<span class="ai-prod-type">' + p.jenis + ' · ' + (p.stok==="Preorder"?"Preorder":"Tersedia") + '</span>' +
+          '<span class="ai-prod-price">' + SLGD.rupiah(p.harga) + '</span>' +
+        '</a>';
+      }).join("");
+    } else {
+      document.getElementById("result-products").innerHTML =
+        '<div style="grid-column:1/-1;font-size:var(--fs-small);color:var(--text-muted);padding:var(--s3) 0;">' +
+        'Lihat koleksi di halaman <a href="jelajahi.html" style="color:var(--maroon);font-weight:600;">Jelajahi Produk</a>.</div>';
+    }
+
+    document.getElementById("result-alts").innerHTML = alts.map(function(item){
+      return '<div class="ai-alt-card" tabindex="0" role="button" onclick="if(SLGD.toast)SLGD.toast(\'' + item.motif.icon.replace(/'/g,"\\'") + ' ' + item.motif.nama.replace(/'/g,"\\'") + '\')">' +
+        '<div class="ai-alt-card-motif">' + item.motif.icon + '</div>' +
+        '<div class="ai-alt-card-name">' + item.motif.nama + '</div>' +
+        '<div class="ai-alt-card-score">' + item.skor + '% kecocokan</div>' +
+        '<div class="ai-alt-bar"><div class="ai-alt-bar-fill" style="width:' + item.skor + '%"></div></div>' +
+      '</div>';
+    }).join("");
+
+    document.getElementById("ai-result").classList.add("show");
+    requestAnimationFrame(function(){ setTimeout(function(){ confBar.style.width = top.skor + "%"; }, 400); });
+    setTimeout(function(){ document.getElementById("ai-result").scrollIntoView({ behavior:"smooth", block:"start" }); }, 300);
+  }
+
+  function ulangi() {
+    state.acara = null; state.motif = null;
+    document.querySelectorAll(".ai-choice").forEach(function(b){ b.classList.remove("selected"); b.setAttribute("aria-pressed","false"); });
+    document.getElementById("btn-next-1").disabled = true;
+    document.getElementById("btn-next-2").disabled = true;
+    document.getElementById("ai-result").classList.remove("show");
+    document.getElementById("step-2").style.display = "none";
+    document.getElementById("step-1").style.display = "block";
+    setStep(1);
+    document.getElementById("step-1").scrollIntoView({ behavior:"smooth", block:"center" });
+  }
+
+  return { pilihAcara:pilihAcara, pilihMotif:pilihMotif, keStep2:keStep2, kembaliStep1:kembaliStep1, prosesRekomendasi:prosesRekomendasi, ulangi:ulangi };
+})();
+</script>
+</body>
+</html>

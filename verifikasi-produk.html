@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cara Verifikasi Produk — LemauGo.id</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Keaslian Produk</span>
+      <h1>Cara Verifikasi Produk</h1>
+      <p>Setiap produk yang tayang di etalase kolektif melewati proses verifikasi pengrajin dan kurasi produk. Berikut cara memastikan keasliannya.</p>
+    </div>
+  </section>
+
+  <div class="container container-narrow prose">
+    <h2>Apa Arti Badge “Terverifikasi IG”?</h2>
+    <p>Badge <strong>Terverifikasi IG</strong> menandakan bahwa produk dibuat oleh pengrajin yang identitas dan proses produksinya telah diperiksa, serta produknya lolos kurasi keaslian berbasis Indikasi Geografis. Pada rancangan implementasi, verifikasi dilakukan oleh administrator platform bersama MPIG sebagai pemangku standar keaslian.</p>
+
+    <h2>Tiga Langkah Memeriksa Produk</h2>
+    <ul>
+      <li><strong>1. Temukan kode produk.</strong> Setiap produk memiliki kode unik, misalnya <code>SLG-B001</code>, yang tercantum pada halaman detail produk dan label fisik kain.</li>
+      <li><strong>2. Cocokkan di halaman detail.</strong> Buka halaman produk di platform, lalu bandingkan kode, nama motif, dan nama pengrajin pada blok “Verifikasi Produk”.</li>
+      <li><strong>3. Kenali pengrajinnya.</strong> Setiap produk terhubung ke profil pengrajin dengan lokasi produksi di Bengkulu Tengah. Anda dapat menghubungi pengrajin melalui kanal yang tercantum.</li>
+    </ul>
+
+    <div class="info-callout">
+      <span id="ic-1"></span>
+      <span>Pada prototipe ini, seluruh kode produk, status kurasi, dan tanggal verifikasi merupakan data simulasi untuk kebutuhan demonstrasi.</span>
+    </div>
+
+    <h2>Apa yang Diperiksa Saat Kurasi?</h2>
+    <ul>
+      <li>Identitas dan domisili pengrajin di wilayah Bengkulu Tengah.</li>
+      <li>Proses produksi: batik tulis, cap, atau kombinasi — bukan kain printing bermotif batik.</li>
+      <li>Kesesuaian motif dengan khazanah motif yang didaftarkan.</li>
+      <li>Kualitas bahan dan kerapian pengerjaan.</li>
+    </ul>
+
+    <h2>Menemukan Produk Tanpa Badge?</h2>
+    <p>Produk berstatus “Dalam proses kurasi” tetap dapat dilihat, namun belum melewati pemeriksaan penuh. Jika Anda ragu terhadap keaslian sebuah produk, hubungi pengelola platform melalui kontak pada footer (data dummy).</p>
+
+    <div style="margin-top: var(--s6); display:flex; gap: var(--s3); flex-wrap: wrap;">
+      <a class="btn btn-primary" href="jelajahi.html?verif=1">Lihat Produk Terverifikasi</a>
+      <a class="btn btn-secondary" href="tentang.html">Tentang Platform</a>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+SLGD.renderPublicHeader("./", "tentang");
+SLGD.renderPublicFooter("./");
+document.getElementById("ic-1").outerHTML = SLGD.icon("info", 18);
+</script>
+</body>
+</html>

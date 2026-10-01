@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jelajahi Produk — LemauGo.id</title>
+<meta name="description" content="Katalog produk Batik Sungai Lemau dari pengrajin terverifikasi Bengkulu Tengah.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Etalase Kolektif</span>
+      <h1>Jelajahi Produk Batik Sungai Lemau</h1>
+      <p>Seluruh produk ditayangkan oleh pengrajin yang telah melalui proses verifikasi. Gunakan pencarian dan filter untuk menemukan kain, selendang, kemeja, atau tote bag.</p>
+    </div>
+  </section>
+
+  <div class="container catalog-layout">
+    <!-- ============ FILTER ============ -->
+    <aside>
+      <button class="btn btn-secondary btn-block filter-toggle" id="filter-toggle" aria-expanded="true" aria-controls="filters">Tampilkan / Sembunyikan Filter</button>
+      <form class="filters" id="filters" aria-label="Filter produk">
+        <h2 id="filter-title">Filter</h2>
+
+        <fieldset>
+          <legend>Jenis produk</legend>
+          <div id="f-jenis"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Rentang harga (Rp)</legend>
+          <div class="price-inputs">
+            <label class="visually-hidden" for="f-harga-min">Harga minimum</label>
+            <input type="number" id="f-harga-min" inputmode="numeric" min="0" placeholder="Min" aria-label="Harga minimum">
+            <span aria-hidden="true">–</span>
+            <label class="visually-hidden" for="f-harga-max">Harga maksimum</label>
+            <input type="number" id="f-harga-max" inputmode="numeric" min="0" placeholder="Maks" aria-label="Harga maksimum">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Motif</legend>
+          <div id="f-motif"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Pengrajin</legend>
+          <div id="f-pengrajin"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ketersediaan</legend>
+          <div id="f-stok"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Kurasi</legend>
+          <label class="checkbox-row"><input type="checkbox" id="f-verif"> Hanya produk terverifikasi IG</label>
+        </fieldset>
+
+        <button type="button" class="btn btn-ghost btn-small" id="f-reset" style="margin-top: var(--s3);">Atur ulang filter</button>
+      </form>
+    </aside>
+
+    <!-- ============ HASIL ============ -->
+    <section aria-label="Hasil pencarian produk">
+      <div class="catalog-toolbar">
+        <div class="catalog-search">
+          <span id="search-icon"></span>
+          <label class="visually-hidden" for="q">Cari produk</label>
+          <input type="search" id="q" placeholder="Cari produk, motif, atau pengrajin…">
+        </div>
+        <div class="catalog-sort">
+          <label for="sort" style="margin:0;">Urutkan</label>
+          <select id="sort">
+            <option value="terbaru">Terbaru</option>
+            <option value="harga-asc">Harga terendah</option>
+            <option value="harga-desc">Harga tertinggi</option>
+            <option value="populer">Paling populer</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="catalog-count" id="count" role="status"></p>
+      <div class="product-grid product-grid-3" id="grid"></div>
+
+      <div class="empty-state" id="empty" hidden>
+        <span id="empty-icon"></span>
+        <h3>Tidak ada produk yang cocok</h3>
+        <p class="mb-0">Coba longgarkan filter atau gunakan kata kunci lain, misalnya “kain” atau “selendang”.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  SLGD.renderPublicHeader("./", "jelajahi");
+  SLGD.renderPublicFooter("./");
+  document.getElementById("search-icon").outerHTML = SLGD.icon("search", 18);
+  document.getElementById("empty-icon").outerHTML = SLGD.icon("search", 40);
+
+  var D = SLGD.DATA;
+  var grid = document.getElementById("grid");
+  var empty = document.getElementById("empty");
+  var count = document.getElementById("count");
+
+  /* ---- Bangun opsi filter dari data ---- */
+  function uniq(arr) { return Array.from(new Set(arr)); }
+  function checkboxes(containerId, name, values, labels) {
+    document.getElementById(containerId).innerHTML = values.map(function (v, i) {
+      return '<label class="checkbox-row"><input type="checkbox" name="' + name + '" value="' + SLGD.esc(v) + '"> ' + SLGD.esc(labels ? labels[i] : v) + "</label>";
+    }).join("");
+  }
+  checkboxes("f-jenis", "jenis", uniq(D.products.map(function (p) { return p.jenis; })));
+  checkboxes("f-motif", "motif", uniq(D.products.map(function (p) { return p.motif; })));
+  checkboxes("f-pengrajin", "pengrajin", D.artisans.map(function (a) { return a.id; }), D.artisans.map(function (a) { return a.usaha; }));
+  checkboxes("f-stok", "stok", ["Tersedia", "Preorder", "Habis"]);
+
+  /* ---- State filter <-> URL ---- */
+  function readState() {
+    var s = { q: document.getElementById("q").value.trim().toLowerCase(),
+      sort: document.getElementById("sort").value,
+      min: parseInt(document.getElementById("f-harga-min").value, 10) || null,
+      max: parseInt(document.getElementById("f-harga-max").value, 10) || null,
+      verif: document.getElementById("f-verif").checked,
+      jenis: [], motif: [], pengrajin: [], stok: [] };
+    ["jenis", "motif", "pengrajin", "stok"].forEach(function (k) {
+      document.querySelectorAll('input[name="' + k + '"]:checked').forEach(function (el) { s[k].push(el.value); });
+    });
+    return s;
+  }
+  function writeUrl(s) {
+    var p = new URLSearchParams();
+    if (s.q) p.set("q", s.q);
+    if (s.sort !== "terbaru") p.set("sort", s.sort);
+    if (s.min) p.set("min", s.min);
+    if (s.max) p.set("max", s.max);
+    if (s.verif) p.set("verif", "1");
+    ["jenis", "motif", "pengrajin", "stok"].forEach(function (k) {
+      if (s[k].length) p.set(k, s[k].join(","));
+    });
+    var qs = p.toString();
+    history.replaceState(null, "", qs ? "?" + qs : location.pathname);
+  }
+  function applyUrl() {
+    var p = new URLSearchParams(location.search);
+    if (p.get("q")) document.getElementById("q").value = p.get("q");
+    if (p.get("sort")) document.getElementById("sort").value = p.get("sort");
+    if (p.get("min")) document.getElementById("f-harga-min").value = p.get("min");
+    if (p.get("max")) document.getElementById("f-harga-max").value = p.get("max");
+    if (p.get("verif")) document.getElementById("f-verif").checked = true;
+    ["jenis", "motif", "pengrajin", "stok"].forEach(function (k) {
+      var v = (p.get(k) || "").split(",").filter(Boolean);
+      v.forEach(function (val) {
+        var el = document.querySelector('input[name="' + k + '"][value="' + CSS.escape(val) + '"]');
+        if (el) el.checked = true;
+      });
+    });
+  }
+
+  /* ---- Saring & urutkan ---- */
+  function filterProducts(s) {
+    var hasil = D.products.filter(function (p) {
+      var a = D.artisanById(p.artisanId);
+      if (s.q) {
+        var teks = (p.nama + " " + p.motif + " " + p.jenis + " " + (a ? a.nama + " " + a.usaha : "")).toLowerCase();
+        if (teks.indexOf(s.q) === -1) return false;
+      }
+      if (s.jenis.length && s.jenis.indexOf(p.jenis) === -1) return false;
+      if (s.motif.length && s.motif.indexOf(p.motif) === -1) return false;
+      if (s.pengrajin.length && s.pengrajin.indexOf(p.artisanId) === -1) return false;
+      if (s.stok.length && s.stok.indexOf(p.stok) === -1) return false;
+      if (s.verif && !p.terverifikasi) return false;
+      if (s.min !== null && p.harga < s.min) return false;
+      if (s.max !== null && p.harga > s.max) return false;
+      return true;
+    });
+    if (s.sort === "harga-asc") hasil.sort(function (a, b) { return a.harga - b.harga; });
+    else if (s.sort === "harga-desc") hasil.sort(function (a, b) { return b.harga - a.harga; });
+    else if (s.sort === "populer") hasil.sort(function (a, b) { return b.populer - a.populer; });
+    else hasil.sort(function (a, b) { return a.tanggal < b.tanggal ? 1 : -1; });
+    return hasil;
+  }
+
+  function skeleton(n) {
+    var s = "";
+    for (var i = 0; i < n; i++) {
+      s += '<div class="skeleton-card" aria-hidden="true"><div class="skeleton sk-img"></div><div class="sk-body"><div class="skeleton sk-line" style="width:40%"></div><div class="skeleton sk-line" style="width:85%"></div><div class="skeleton sk-line" style="width:60%"></div></div></div>';
+    }
+    return s;
+  }
+
+  var timerSkeleton = null;
+  function render(withSkeleton) {
+    var s = readState();
+    writeUrl(s);
+    if (withSkeleton) {
+      grid.innerHTML = skeleton(6);
+      empty.hidden = true;
+      count.textContent = "Memuat produk…";
+      clearTimeout(timerSkeleton);
+      timerSkeleton = setTimeout(function () { renderNow(s); }, 420);
+    } else {
+      renderNow(s);
+    }
+  }
+  function renderNow(s) {
+    var hasil = filterProducts(s);
+    count.textContent = hasil.length ? "Menampilkan " + hasil.length + " dari " + D.products.length + " produk (data simulasi)" : "";
+    if (!hasil.length) {
+      grid.innerHTML = "";
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    grid.innerHTML = hasil.map(function (p) { return SLGD.productCard(p, "./"); }).join("");
+  }
+
+  /* ---- Event ---- */
+  var debounce = null;
+  document.getElementById("q").addEventListener("input", function () {
+    clearTimeout(debounce);
+    debounce = setTimeout(function () { render(false); }, 250);
+  });
+  document.getElementById("sort").addEventListener("change", function () { render(false); });
+  ["f-harga-min", "f-harga-max"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", function () { render(false); });
+  });
+  document.getElementById("filters").addEventListener("change", function (e) {
+    if (e.target.matches('input[type="checkbox"]')) render(false);
+  });
+  document.getElementById("f-reset").addEventListener("click", function () {
+    document.getElementById("filters").reset();
+    document.getElementById("q").value = "";
+    document.getElementById("sort").value = "terbaru";
+    render(false);
+  });
+  var ft = document.getElementById("filter-toggle");
+  var filters = document.getElementById("filters");
+  function syncFilterVisibility() {
+    if (window.innerWidth <= 1024) {
+      if (!filters.hasAttribute("data-init")) { filters.setAttribute("data-collapsed", "true"); ft.setAttribute("aria-expanded", "false"); filters.setAttribute("data-init", "1"); }
+    } else {
+      filters.removeAttribute("data-collapsed");
+    }
+  }
+  ft.addEventListener("click", function () {
+    var collapsed = filters.getAttribute("data-collapsed") === "true";
+    filters.setAttribute("data-collapsed", collapsed ? "false" : "true");
+    ft.setAttribute("aria-expanded", collapsed ? "true" : "false");
+  });
+  window.addEventListener("resize", syncFilterVisibility);
+
+  /* ---- Mulai ---- */
+  applyUrl();
+  syncFilterVisibility();
+  render(true);
+})();
+</script>
+</body>
+</html>

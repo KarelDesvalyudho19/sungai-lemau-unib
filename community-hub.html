@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community Hub — LemauGo.id | Ruang Kolaborasi Batik Sungai Lemau</title>
+<meta name="description" content="Community Hub LemauGo.id — Ruang kolaborasi digital antara pengrajin Batik Sungai Lemau dengan stakeholder: MPIG, Pemerintah, Perguruan Tinggi, dan Lembaga Keuangan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+/* ============================================================
+   Community Hub — Gaya khusus halaman
+   Palet: merah marun, beige, emas, elegan budaya Bengkulu
+   ============================================================ */
+:root {
+  --maroon:       #6B1F2A;
+  --maroon-dark:  #4E1520;
+  --maroon-soft:  #82253A;
+  --maroon-mist:  #F5EEF0;
+  --beige:        #F5F0E6;
+  --beige-warm:   #EFE8D8;
+  --beige-deep:   #E4D8C2;
+  --gold-pale:    #FDF6E9;
+}
+
+/* ---- Hero ---- */
+.ch-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 50%, #8B2635 100%);
+  color: var(--beige);
+  padding: var(--s8) 0 var(--s7);
+  overflow: hidden;
+}
+.ch-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 50%, rgba(195,154,82,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(195,154,82,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ch-hero-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image:
+    repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%),
+    repeating-linear-gradient(-45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.ch-hero-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.ch-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--fs-tiny);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(195,154,82,0.35);
+  background: rgba(195,154,82,0.1);
+  border-radius: 999px;
+  padding: 6px 16px;
+  margin-bottom: var(--s4);
+}
+.ch-hero h1 {
+  color: var(--beige);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin-bottom: var(--s4);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+.ch-hero .ch-subtitle {
+  font-size: 1.125rem;
+  color: rgba(245,240,230,0.82);
+  max-width: 580px;
+  margin: 0 auto var(--s6);
+  line-height: 1.7;
+}
+.ch-hero-actions {
+  display: flex;
+  gap: var(--s3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--maroon-dark);
+  border: 1px solid var(--gold);
+  font-weight: 700;
+}
+.btn-gold:hover { background: #b08a45; border-color: #b08a45; color: var(--maroon-dark); }
+.btn-outline-beige {
+  background: transparent;
+  color: var(--beige);
+  border: 1px solid rgba(245,240,230,0.45);
+}
+.btn-outline-beige:hover {
+  background: rgba(245,240,230,0.1);
+  border-color: rgba(245,240,230,0.7);
+  color: var(--beige);
+}
+
+/* ---- Statistik ---- */
+.ch-stats { background: var(--maroon-dark); border-bottom: 1px solid rgba(195,154,82,0.25); }
+.ch-stats-inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.ch-stat-item {
+  text-align: center;
+  padding: var(--s5) var(--s4);
+  border-right: 1px solid rgba(195,154,82,0.2);
+}
+.ch-stat-item:last-child { border-right: none; }
+.ch-stat-num {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  margin-bottom: 4px;
+}
+.ch-stat-label { font-size: var(--fs-tiny); color: rgba(245,240,230,0.65); }
+
+/* ---- Section head ---- */
+.ch-stakeholder-section { padding: var(--s8) 0; background: var(--beige); }
+.ch-section-head { text-align: center; margin-bottom: var(--s7); }
+.ch-section-head h2 { color: var(--maroon-dark); margin-bottom: var(--s3); }
+.ch-section-head p { color: var(--text-muted); max-width: 560px; margin: 0 auto; }
+.ch-accent-line { display: flex; justify-content: center; margin-bottom: var(--s3); }
+
+/* ---- Stakeholder grid ---- */
+.stakeholder-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--s4);
+}
+.stakeholder-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  padding: var(--s5) var(--s4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: border-color var(--t-med), box-shadow var(--t-med), transform var(--t-med);
+  position: relative;
+  overflow: hidden;
+}
+.stakeholder-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--maroon), var(--gold));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-med);
+}
+.stakeholder-card:hover {
+  border-color: var(--maroon);
+  box-shadow: 0 8px 32px rgba(107,31,42,0.12);
+  transform: translateY(-4px);
+}
+.stakeholder-card:hover::before { transform: scaleX(1); }
+.sh-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--s4);
+  flex-shrink: 0;
+}
+.sh-icon-pengrajin { background: linear-gradient(135deg, #F5EEF0, #E8C4CC); color: var(--maroon); }
+.sh-icon-mpig      { background: linear-gradient(135deg, var(--gold-pale), var(--gold-soft)); color: #7A5E20; }
+.sh-icon-pemda     { background: linear-gradient(135deg, #E8EEE9, var(--sage)); color: var(--forest); }
+.sh-icon-perguruan { background: linear-gradient(135deg, #EEF2FF, #D5DEFF); color: #3B4CA8; }
+.sh-icon-keuangan  { background: linear-gradient(135deg, #F0F9F4, #C7E8D5); color: #1A6B40; }
+.sh-role {
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--maroon);
+  margin-bottom: var(--s2);
+}
+.stakeholder-card h3 {
+  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: var(--s3);
+  line-height: 1.3;
+}
+.stakeholder-card p { font-size: var(--fs-small); color: var(--text-muted); line-height: 1.6; margin: 0; }
+.sh-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-top: var(--s3);
+}
+.sh-tag-pengrajin { background: var(--maroon-mist); color: var(--maroon); }
+.sh-tag-mpig      { background: var(--gold-pale); color: #7A5E20; }
+.sh-tag-pemda     { background: var(--ok-soft); color: var(--ok); }
+.sh-tag-perguruan { background: #EEF2FF; color: #3B4CA8; }
+.sh-tag-keuangan  { background: #F0F9F4; color: #1A6B40; }
+
+/* ---- Fitur ---- */
+.ch-features { background: var(--maroon-dark); padding: var(--s8) 0; }
+.ch-features .ch-section-head h2 { color: var(--gold); }
+.ch-features .ch-section-head p { color: rgba(245,240,230,0.7); }
+.ch-features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
+.ch-feat-card {
+  background: rgba(245,240,230,0.05);
+  border: 1px solid rgba(195,154,82,0.2);
+  border-radius: var(--radius-l);
+  padding: var(--s6) var(--s5);
+  transition: background var(--t-med), border-color var(--t-med);
+}
+.ch-feat-card:hover { background: rgba(245,240,230,0.09); border-color: rgba(195,154,82,0.45); }
+.ch-feat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-m);
+  background: rgba(195,154,82,0.15);
+  border: 1px solid rgba(195,154,82,0.3);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--s4);
+}
+.ch-feat-card h3 { font-size: 1.15rem; font-family: var(--font-body); font-weight: 700; color: var(--beige); margin-bottom: var(--s3); }
+.ch-feat-card p { font-size: var(--fs-small); color: rgba(245,240,230,0.72); line-height: 1.65; margin: 0 0 var(--s4); }
+.ch-feat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-tiny);
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(195,154,82,0.12);
+  border: 1px solid rgba(195,154,82,0.25);
+  border-radius: var(--radius-s);
+  padding: 5px 10px;
+}
+
+/* ---- Forum ---- */
+.ch-forum { background: var(--beige-warm); padding: var(--s8) 0; border-top: 1px solid var(--line-soft); }
+.ch-forum .ch-section-head h2 { color: var(--maroon-dark); }
+.forum-grid { display: grid; grid-template-columns: 1fr 360px; gap: var(--s6); align-items: start; }
+.forum-threads { display: flex; flex-direction: column; gap: var(--s4); }
+.forum-thread {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  padding: var(--s5);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  cursor: pointer;
+}
+.forum-thread:hover { border-color: var(--maroon); box-shadow: 0 4px 16px rgba(107,31,42,0.08); }
+.forum-thread-header { display: flex; align-items: flex-start; gap: var(--s3); margin-bottom: var(--s3); }
+.forum-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--maroon-mist), #E8C4CC);
+  color: var(--maroon);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.forum-meta { flex: 1; }
+.forum-author { font-weight: 600; font-size: var(--fs-small); color: var(--charcoal); }
+.forum-time   { font-size: var(--fs-tiny); color: var(--text-muted); }
+.forum-category {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+}
+.cat-pengrajin { background: var(--maroon-mist); color: var(--maroon); }
+.cat-riset     { background: #EEF2FF; color: #3B4CA8; }
+.cat-pasar     { background: var(--gold-pale); color: #7A5E20; }
+.cat-pemda     { background: var(--ok-soft); color: var(--ok); }
+.forum-thread h4 { font-size: 1rem; font-family: var(--font-body); font-weight: 700; color: var(--charcoal); margin: 0 0 var(--s2); }
+.forum-thread p  { font-size: var(--fs-small); color: var(--text-muted); margin: 0 0 var(--s3); }
+.forum-stats { display: flex; gap: var(--s4); font-size: var(--fs-tiny); color: var(--text-muted); }
+.forum-stats span { display: flex; align-items: center; gap: 5px; }
+.forum-post-box { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-l); padding: var(--s5); }
+.forum-post-box h4 { font-size: 1rem; font-family: var(--font-body); font-weight: 700; color: var(--charcoal); margin-bottom: var(--s4); display: flex; align-items: center; gap: var(--s2); }
+
+/* ---- Program Pendampingan ---- */
+.ch-programs { background: var(--white); padding: var(--s8) 0; }
+.ch-programs .ch-section-head h2 { color: var(--maroon-dark); }
+.programs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s5); }
+.program-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  background: var(--white);
+  transition: border-color var(--t-med), box-shadow var(--t-med);
+}
+.program-card:hover { border-color: var(--gold); box-shadow: 0 6px 24px rgba(107,31,42,0.08); }
+.program-header {
+  padding: var(--s5);
+  display: flex;
+  gap: var(--s4);
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line-soft);
+}
+.program-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-m);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.prog-icon-1 { background: var(--maroon-mist); color: var(--maroon); }
+.prog-icon-2 { background: var(--gold-pale); color: #7A5E20; }
+.prog-icon-3 { background: var(--ok-soft); color: var(--ok); }
+.prog-icon-4 { background: #EEF2FF; color: #3B4CA8; }
+.program-info { flex: 1; }
+.program-info h3 { font-size: 1.05rem; font-family: var(--font-body); font-weight: 700; color: var(--charcoal); margin-bottom: var(--s2); }
+.prog-status {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px;
+}
+.prog-open   { background: var(--ok-soft); color: var(--ok); }
+.prog-coming { background: var(--warn-soft); color: var(--warn); }
+.prog-active { background: var(--maroon-mist); color: var(--maroon); }
+.program-body { padding: var(--s4) var(--s5) var(--s5); }
+.program-body p { font-size: var(--fs-small); color: var(--text-muted); margin-bottom: var(--s3); }
+.program-meta-list {
+  list-style: none; margin: 0 0 var(--s4); padding: 0;
+  display: flex; flex-direction: column; gap: var(--s2);
+}
+.program-meta-list li { display: flex; align-items: center; gap: var(--s2); font-size: var(--fs-tiny); color: var(--text-muted); }
+.program-meta-list svg { color: var(--text-faint); flex-shrink: 0; }
+
+/* ---- Ajakan Kolaborasi ---- */
+.ch-collab {
+  background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 60%, #9B2D3C 100%);
+  padding: var(--s8) 0;
+  position: relative;
+  overflow: hidden;
+}
+.ch-collab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(195,154,82,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ch-collab-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s7);
+  align-items: center;
+}
+.ch-collab-text h2 { color: var(--beige); font-size: clamp(1.6rem, 3vw, 2.4rem); margin-bottom: var(--s4); }
+.ch-collab-text p { color: rgba(245,240,230,0.78); font-size: 1rem; line-height: 1.7; margin-bottom: var(--s5); }
+.ch-collab-reasons {
+  list-style: none; margin: 0 0 var(--s5); padding: 0;
+  display: flex; flex-direction: column; gap: var(--s3);
+}
+.ch-collab-reasons li { display: flex; align-items: flex-start; gap: var(--s3); font-size: var(--fs-small); color: rgba(245,240,230,0.85); }
+.ch-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(195,154,82,0.2);
+  border: 1px solid rgba(195,154,82,0.4);
+  color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.ch-collab-form {
+  background: rgba(245,240,230,0.07);
+  border: 1px solid rgba(195,154,82,0.25);
+  border-radius: var(--radius-l);
+  padding: var(--s6);
+  backdrop-filter: blur(8px);
+}
+.ch-collab-form h3 { color: var(--gold); font-size: 1.25rem; margin-bottom: var(--s2); }
+.ch-collab-form > p { color: rgba(245,240,230,0.65); font-size: var(--fs-small); margin-bottom: var(--s5); }
+.ch-form-field { margin-bottom: var(--s4); }
+.ch-form-field label { color: rgba(245,240,230,0.85); font-size: var(--fs-small); font-weight: 600; margin-bottom: 6px; }
+.ch-form-field input,
+.ch-form-field select,
+.ch-form-field textarea {
+  background: rgba(245,240,230,0.08);
+  border: 1px solid rgba(195,154,82,0.3);
+  color: var(--beige);
+  border-radius: var(--radius-s);
+}
+.ch-form-field input::placeholder,
+.ch-form-field textarea::placeholder { color: rgba(245,240,230,0.35); }
+.ch-form-field input:focus,
+.ch-form-field select:focus,
+.ch-form-field textarea:focus {
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(195,154,82,0.2);
+}
+.ch-form-field select option { background: var(--maroon-dark); color: var(--beige); }
+.ch-form-field textarea { min-height: 90px; resize: vertical; }
+
+/* ---- CTA Gabung ---- */
+.ch-join { background: var(--beige-warm); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: var(--s8) 0; text-align: center; }
+.ch-join h2 { color: var(--maroon-dark); font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-bottom: var(--s4); max-width: 640px; margin-left: auto; margin-right: auto; }
+.ch-join p { color: var(--text-muted); font-size: 1.0625rem; max-width: 520px; margin: 0 auto var(--s6); line-height: 1.7; }
+.btn-join {
+  background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+  color: var(--beige);
+  border: none;
+  font-size: 1.125rem;
+  padding: 16px 40px;
+  border-radius: var(--radius-l);
+  min-height: 56px;
+  box-shadow: 0 4px 20px rgba(107,31,42,0.3);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s3);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+.btn-join:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(107,31,42,0.4); color: var(--gold-soft); }
+.btn-join:active { transform: none; }
+.ch-join-note { margin-top: var(--s5); display: flex; gap: var(--s5); justify-content: center; flex-wrap: wrap; }
+.ch-join-note span { display: flex; align-items: center; gap: var(--s2); font-size: var(--fs-tiny); color: var(--text-muted); }
+
+/* ---- Modal join ---- */
+.join-modal-body { display: flex; flex-direction: column; gap: var(--s4); }
+.join-step { display: grid; grid-template-columns: 36px 1fr; gap: var(--s3); align-items: flex-start; }
+.join-step-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--maroon-mist);
+  color: var(--maroon);
+  font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.join-step h4 { font-size: var(--fs-small); font-family: var(--font-body); font-weight: 700; color: var(--charcoal); margin-bottom: 3px; }
+.join-step p  { font-size: var(--fs-tiny); color: var(--text-muted); margin: 0; }
+
+/* ---- Responsif ---- */
+@media (max-width: 1100px) {
+  .stakeholder-grid { grid-template-columns: repeat(3, 1fr); }
+  .ch-collab-inner  { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .forum-grid         { grid-template-columns: 1fr; }
+  .ch-features-grid   { grid-template-columns: 1fr; }
+  .programs-grid      { grid-template-columns: 1fr; }
+  .ch-stats-inner     { grid-template-columns: repeat(2, 1fr); }
+  .ch-stat-item:nth-child(2) { border-right: none; }
+}
+@media (max-width: 720px) {
+  .stakeholder-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .stakeholder-grid { grid-template-columns: 1fr; }
+  .ch-collab-form   { padding: var(--s5) var(--s4); }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+
+  <!-- HERO -->
+  <section class="ch-hero" aria-label="Selamat datang di Community Hub">
+    <div class="ch-hero-pattern" aria-hidden="true"></div>
+    <div class="container">
+      <div class="ch-hero-inner">
+        <div class="ch-eyebrow" id="ch-eyebrow">
+          <span>Community Hub LemauGo.id</span>
+        </div>
+        <h1>Ruang Kolaborasi Batik Sungai Lemau</h1>
+        <p class="ch-subtitle">
+          Ruang kolaborasi untuk memperkuat ekosistem Batik Sungai Lemau —
+          mempertemukan pengrajin, pemangku kebijakan, akademisi, dan lembaga keuangan
+          dalam satu platform digital yang terintegrasi.
+        </p>
+        <div class="ch-hero-actions">
+          <button class="btn btn-gold" id="btn-join-hero" onclick="bukaModalGabung()">
+            <span id="ch-icon-join"></span>
+            Gabung Komunitas
+          </button>
+          <a class="btn btn-outline-beige" href="#forum">
+            <span id="ch-icon-chat"></span>
+            Lihat Forum Diskusi
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATISTIK -->
+  <section class="ch-stats" aria-label="Statistik komunitas">
+    <div class="container">
+      <div class="ch-stats-inner">
+        <div class="ch-stat-item">
+          <span class="ch-stat-num">5</span>
+          <span class="ch-stat-label">Kelompok Stakeholder</span>
+        </div>
+        <div class="ch-stat-item">
+          <span class="ch-stat-num">12+</span>
+          <span class="ch-stat-label">Pengrajin Terverifikasi</span>
+        </div>
+        <div class="ch-stat-item">
+          <span class="ch-stat-num">4</span>
+          <span class="ch-stat-label">Program Pendampingan</span>
+        </div>
+        <div class="ch-stat-item">
+          <span class="ch-stat-num">1</span>
+          <span class="ch-stat-label">Ekosistem Digital</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KARTU STAKEHOLDER -->
+  <section class="ch-stakeholder-section" id="stakeholder" aria-labelledby="sh-heading">
+    <div class="container">
+      <div class="ch-section-head">
+        <div class="ch-accent-line" id="sh-accent"></div>
+        <h2 id="sh-heading">Ekosistem Pemangku Kepentingan</h2>
+        <p>Lima kelompok stakeholder bersinergi memperkuat rantai nilai Batik Sungai Lemau dari hulu ke hilir.</p>
+      </div>
+      <div class="stakeholder-grid" role="list">
+
+        <article class="stakeholder-card" role="listitem">
+          <div class="sh-icon sh-icon-pengrajin" id="sh-icon-1" aria-hidden="true"></div>
+          <span class="sh-role">Pengrajin</span>
+          <h3>Pengrajin Batik</h3>
+          <p>Berbagi kapasitas produksi, menerima pesanan dari berbagai kanal, dan berkolaborasi sesama pengrajin terverifikasi.</p>
+          <span class="sh-tag sh-tag-pengrajin" id="sh-tag-1"></span>
+        </article>
+
+        <article class="stakeholder-card" role="listitem">
+          <div class="sh-icon sh-icon-mpig" id="sh-icon-2" aria-hidden="true"></div>
+          <span class="sh-role">Pemangku IG</span>
+          <h3>MPIG Batik Sungai Lemau</h3>
+          <p>Verifikasi keaslian produk, penjagaan standar motif dan proses produksi sesuai indikasi geografis yang terdaftar.</p>
+          <span class="sh-tag sh-tag-mpig" id="sh-tag-2"></span>
+        </article>
+
+        <article class="stakeholder-card" role="listitem">
+          <div class="sh-icon sh-icon-pemda" id="sh-icon-3" aria-hidden="true"></div>
+          <span class="sh-role">Pemerintah</span>
+          <h3>Pemerintah &amp; Dekranasda</h3>
+          <p>Pendampingan UMKM, fasilitasi akses program pemerintah, sertifikasi, dan advokasi kebijakan untuk pengrajin lokal.</p>
+          <span class="sh-tag sh-tag-pemda" id="sh-tag-3"></span>
+        </article>
+
+        <article class="stakeholder-card" role="listitem">
+          <div class="sh-icon sh-icon-perguruan" id="sh-icon-4" aria-hidden="true"></div>
+          <span class="sh-role">Akademisi</span>
+          <h3>Perguruan Tinggi</h3>
+          <p>Riset motif dan pewarna alami, pengembangan digital volunteer, serta program KKN berbasis pemberdayaan batik.</p>
+          <span class="sh-tag sh-tag-perguruan" id="sh-tag-4"></span>
+        </article>
+
+        <article class="stakeholder-card" role="listitem">
+          <div class="sh-icon sh-icon-keuangan" id="sh-icon-5" aria-hidden="true"></div>
+          <span class="sh-role">Keuangan</span>
+          <h3>Lembaga Keuangan</h3>
+          <p>Akses pembiayaan UMKM, linkage program KUR, pembinaan literasi keuangan, dan dukungan QRIS bagi pengrajin.</p>
+          <span class="sh-tag sh-tag-keuangan" id="sh-tag-5"></span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FITUR UTAMA -->
+  <section class="ch-features" id="fitur" aria-labelledby="feat-heading">
+    <div class="container">
+      <div class="ch-section-head">
+        <h2 id="feat-heading">Fitur Community Hub</h2>
+        <p>Tiga pilar kolaborasi digital yang menghubungkan seluruh ekosistem Batik Sungai Lemau.</p>
+      </div>
+      <div class="ch-features-grid">
+        <div class="ch-feat-card">
+          <div class="ch-feat-icon" id="feat-icon-1"></div>
+          <h3>Forum Diskusi</h3>
+          <p>Ruang tanya-jawab dan berbagi pengalaman lintas stakeholder. Pengrajin dapat bertanya soal teknik, harga pasar, hingga tantangan produksi. Akademisi dan pemda dapat merespons langsung.</p>
+          <span class="ch-feat-tag" id="feat-tag-1">Terbuka · Multistakeholder</span>
+        </div>
+        <div class="ch-feat-card">
+          <div class="ch-feat-icon" id="feat-icon-2"></div>
+          <h3>Program Pendampingan</h3>
+          <p>Daftar program aktif dari berbagai mitra: pelatihan digital marketing, bantuan modal usaha, pendampingan sertifikasi IG, dan workshop fotografi produk.</p>
+          <span class="ch-feat-tag" id="feat-tag-2">Terstruktur · Terjadwal</span>
+        </div>
+        <div class="ch-feat-card">
+          <div class="ch-feat-icon" id="feat-icon-3"></div>
+          <h3>Ajakan Kolaborasi</h3>
+          <p>Mekanisme pengajuan kolaborasi dari institusi, peneliti, atau pelaku bisnis yang ingin bermitra dengan pengrajin Batik Sungai Lemau secara terstruktur dan terverifikasi.</p>
+          <span class="ch-feat-tag" id="feat-tag-3">Terverifikasi · Transparan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORUM DISKUSI -->
+  <section class="ch-forum" id="forum" aria-labelledby="forum-heading">
+    <div class="container">
+      <div class="ch-section-head">
+        <div class="ch-accent-line" id="forum-accent"></div>
+        <h2 id="forum-heading">Forum Diskusi Komunitas</h2>
+        <p>Diskusi aktif antara pengrajin, akademisi, dan pemangku kebijakan. Semua orang bisa berkontribusi.</p>
+      </div>
+      <div class="forum-grid">
+        <div>
+          <div class="forum-threads" id="forum-threads" aria-label="Daftar topik diskusi"></div>
+        </div>
+        <aside>
+          <div class="forum-post-box">
+            <h4 id="forum-form-title">Mulai Diskusi Baru</h4>
+            <div class="field">
+              <label for="forum-nama">Nama / Institusi</label>
+              <input type="text" id="forum-nama" placeholder="cth. Batik Aminah · Pengrajin">
+            </div>
+            <div class="field">
+              <label for="forum-kategori">Kategori</label>
+              <select id="forum-kategori">
+                <option value="">Pilih kategori...</option>
+                <option>Produksi &amp; Teknik Batik</option>
+                <option>Pemasaran &amp; Penjualan</option>
+                <option>Sertifikasi &amp; Indikasi Geografis</option>
+                <option>Pembiayaan UMKM</option>
+                <option>Riset &amp; Inovasi</option>
+                <option>Program Pemerintah</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="forum-judul">Judul Diskusi</label>
+              <input type="text" id="forum-judul" placeholder="Tuliskan topik yang ingin didiskusikan...">
+            </div>
+            <div class="field">
+              <label for="forum-pesan">Isi Pesan</label>
+              <textarea id="forum-pesan" placeholder="Uraikan pertanyaan atau ide Anda..."></textarea>
+            </div>
+            <button class="btn btn-primary" style="width:100%; background:var(--maroon); border-color:var(--maroon);"
+              onclick="kirimForum()" id="btn-kirim-forum">
+              <span id="btn-forum-icon"></span>
+              Kirim Diskusi
+            </button>
+          </div>
+          <div class="card" style="margin-top:var(--s4); background:var(--maroon-mist); border-color:rgba(107,31,42,0.2);">
+            <h4 style="font-size:var(--fs-small); font-family:var(--font-body); color:var(--maroon-dark); margin-bottom:var(--s3);">Anggota Aktif</h4>
+            <div id="anggota-aktif" style="display:flex; gap:var(--s2); flex-wrap:wrap;"></div>
+            <p style="margin:var(--s3) 0 0; font-size:var(--fs-tiny); color:var(--text-muted);">
+              Bergabunglah dan jadilah bagian dari komunitas pengrajin dan mitra terbaik.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAM PENDAMPINGAN -->
+  <section class="ch-programs" id="program" aria-labelledby="prog-heading">
+    <div class="container">
+      <div class="ch-section-head">
+        <div class="ch-accent-line" id="prog-accent"></div>
+        <h2 id="prog-heading">Program Pendampingan Aktif</h2>
+        <p>Daftar program yang tersedia untuk pengrajin dan mitra ekosistem Batik Sungai Lemau.</p>
+      </div>
+      <div class="programs-grid" id="programs-grid" role="list"></div>
+    </div>
+  </section>
+
+  <!-- AJAKAN KOLABORASI -->
+  <section class="ch-collab" id="kolaborasi" aria-labelledby="collab-heading">
+    <div class="container">
+      <div class="ch-collab-inner">
+        <div class="ch-collab-text">
+          <span class="eyebrow" style="color:var(--gold);">Bergabung Sebagai Mitra</span>
+          <h2 id="collab-heading">Mari Bersama Memperkuat Batik Sungai Lemau</h2>
+          <p>Kami membuka kolaborasi dengan institusi, peneliti, pelaku bisnis, dan siapa pun yang ingin berkontribusi pada pelestarian dan pengembangan Batik Sungai Lemau Bengkulu Tengah.</p>
+          <ul class="ch-collab-reasons" aria-label="Alasan berkolaborasi">
+            <li><span class="ch-check" id="chk-1" aria-hidden="true"></span>Akses langsung ke jaringan pengrajin batik terverifikasi</li>
+            <li><span class="ch-check" id="chk-2" aria-hidden="true"></span>Peluang riset motif dan dokumentasi warisan budaya Bengkulu</li>
+            <li><span class="ch-check" id="chk-3" aria-hidden="true"></span>Sinergi program CSR, KKN, atau program kemitraan UMKM</li>
+            <li><span class="ch-check" id="chk-4" aria-hidden="true"></span>Mendukung ekosistem ekonomi kreatif berbasis kearifan lokal</li>
+          </ul>
+          <div style="display:flex; gap:var(--s3); flex-wrap:wrap;">
+            <button class="btn btn-gold" onclick="bukaModalGabung()">
+              <span id="collab-icon-join"></span>
+              Daftarkan Mitra Anda
+            </button>
+            <a class="btn btn-outline-beige" href="tentang.html">Pelajari Lebih Lanjut</a>
+          </div>
+        </div>
+
+        <div class="ch-collab-form" role="form" aria-label="Formulir pengajuan kolaborasi">
+          <h3>Ajukan Kolaborasi</h3>
+          <p>Isi formulir ini dan tim kami akan menghubungi Anda dalam 1x24 jam kerja.</p>
+          <div class="ch-form-field">
+            <label for="kol-nama">Nama / Organisasi</label>
+            <input type="text" id="kol-nama" placeholder="cth. Universitas Bengkulu">
+          </div>
+          <div class="ch-form-field">
+            <label for="kol-email">Email Aktif</label>
+            <input type="email" id="kol-email" placeholder="nama@institusi.ac.id">
+          </div>
+          <div class="ch-form-field">
+            <label for="kol-jenis">Jenis Kolaborasi</label>
+            <select id="kol-jenis">
+              <option value="">Pilih jenis kolaborasi...</option>
+              <option>Penelitian / Riset Akademik</option>
+              <option>Program KKN / Magang</option>
+              <option>Pelatihan &amp; Pendampingan UMKM</option>
+              <option>Pendanaan / Pembiayaan</option>
+              <option>Pemasaran &amp; Distribusi</option>
+              <option>CSR Perusahaan</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+          <div class="ch-form-field">
+            <label for="kol-pesan">Deskripsi Singkat</label>
+            <textarea id="kol-pesan" placeholder="Ceritakan ide kolaborasi Anda..."></textarea>
+          </div>
+          <button class="btn btn-gold" style="width:100%;" onclick="kirimKolaborasi()" id="btn-kolaborasi">
+            <span id="kol-icon-send"></span>
+            Kirim Pengajuan
+          </button>
+          <p style="font-size:var(--fs-tiny); color:rgba(245,240,230,0.5); margin:var(--s3) 0 0; text-align:center;">
+            Data Anda hanya digunakan untuk tindak lanjut kolaborasi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GABUNG KOMUNITAS (CTA) -->
+  <section class="ch-join" id="gabung" aria-labelledby="join-heading">
+    <div class="container">
+      <h2 id="join-heading">Jadilah Bagian dari Komunitas Batik Sungai Lemau</h2>
+      <p>Bersama kita bangun ekosistem digital yang memberdayakan pengrajin, melestarikan budaya Bengkulu, dan memperluas pasar batik asli Sungai Lemau.</p>
+      <button class="btn-join" onclick="bukaModalGabung()" id="btn-join-main" aria-label="Gabung Komunitas Community Hub">
+        <span id="join-icon-main"></span>
+        Gabung Komunitas Sekarang
+      </button>
+      <div class="ch-join-note" aria-label="Informasi bergabung">
+        <span id="join-note-1"></span>
+        <span id="join-note-2"></span>
+        <span id="join-note-3"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<!-- Modal Gabung -->
+<div id="modal-gabung" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-gabung-judul">
+  <div class="modal" style="max-width:520px;">
+    <h3 id="modal-gabung-judul" style="color:var(--maroon-dark);">Cara Bergabung ke Community Hub</h3>
+    <div class="join-modal-body">
+      <div class="join-step">
+        <div class="join-step-num">1</div>
+        <div>
+          <h4>Daftar atau Masuk</h4>
+          <p>Buat akun LemauGo.id atau masuk jika sudah memiliki akun pengrajin terverifikasi.</p>
+        </div>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">2</div>
+        <div>
+          <h4>Pilih Peran Anda</h4>
+          <p>Tentukan peran: Pengrajin, MPIG, Pemerintah/Dekranasda, Akademisi, atau Lembaga Keuangan.</p>
+        </div>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">3</div>
+        <div>
+          <h4>Verifikasi Identitas</h4>
+          <p>Unggah dokumen pendukung sesuai peran. Admin akan memverifikasi dalam 1x24 jam kerja.</p>
+        </div>
+      </div>
+      <div class="join-step">
+        <div class="join-step-num">4</div>
+        <div>
+          <h4>Mulai Berkolaborasi</h4>
+          <p>Akses forum, daftar program pendampingan, dan jalin kemitraan dengan seluruh ekosistem.</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="tutupModalGabung()">Nanti Dulu</button>
+      <a class="btn btn-primary" href="masuk.html" style="background:var(--maroon); border-color:var(--maroon);">Masuk / Daftar Sekarang</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  /* Header & Footer */
+  SLGD.renderPublicHeader("./", "community-hub");
+  SLGD.renderPublicFooter("./");
+
+  /* Ikon hero */
+  document.getElementById("ch-eyebrow").prepend(
+    (function(){ var s=document.createElement("span"); s.innerHTML=SLGD.icon("users",14); return s.firstChild; })()
+  );
+  document.getElementById("ch-icon-join").innerHTML  = SLGD.icon("users", 18);
+  document.getElementById("ch-icon-chat").innerHTML  = SLGD.icon("chat",  18);
+
+  /* Aksen sungai */
+  ["sh-accent","forum-accent","prog-accent"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.innerHTML=SLGD.riverAccent();
+  });
+
+  /* Ikon stakeholder */
+  document.getElementById("sh-icon-1").innerHTML = SLGD.icon("users",  26);
+  document.getElementById("sh-icon-2").innerHTML = SLGD.icon("shield", 26);
+  document.getElementById("sh-icon-3").innerHTML = SLGD.icon("home",   26);
+  document.getElementById("sh-icon-4").innerHTML = SLGD.icon("book",   26);
+  document.getElementById("sh-icon-5").innerHTML = SLGD.icon("wallet", 26);
+
+  /* Tag stakeholder */
+  var tags=[
+    {id:"sh-tag-1", icon:"store",   label:"Berbagi Kapasitas"},
+    {id:"sh-tag-2", icon:"shield",  label:"Verifikasi Keaslian"},
+    {id:"sh-tag-3", icon:"check",   label:"Pendampingan UMKM"},
+    {id:"sh-tag-4", icon:"book",    label:"Riset & Digital Volunteer"},
+    {id:"sh-tag-5", icon:"wallet",  label:"Akses Pembiayaan"}
+  ];
+  tags.forEach(function(t){
+    var el=document.getElementById(t.id);
+    if(el) el.innerHTML=SLGD.icon(t.icon,12)+" "+t.label;
+  });
+
+  /* Ikon fitur */
+  document.getElementById("feat-icon-1").innerHTML=SLGD.icon("chat",   24);
+  document.getElementById("feat-icon-2").innerHTML=SLGD.icon("doc",    24);
+  document.getElementById("feat-icon-3").innerHTML=SLGD.icon("users",  24);
+  document.getElementById("feat-tag-1").innerHTML =SLGD.icon("chat",   12)+" Terbuka · Multistakeholder";
+  document.getElementById("feat-tag-2").innerHTML =SLGD.icon("doc",    12)+" Terstruktur · Terjadwal";
+  document.getElementById("feat-tag-3").innerHTML =SLGD.icon("shield", 12)+" Terverifikasi · Transparan";
+
+  /* Forum: ikon judul & tombol */
+  document.getElementById("forum-form-title").prepend(
+    (function(){ var s=document.createElement("span"); s.innerHTML=SLGD.icon("chat",16); return s.firstChild; })()
+  );
+  document.getElementById("btn-forum-icon").innerHTML=SLGD.icon("arrowRight",16);
+
+  /* Thread forum simulasi */
+  var threads=[
+    {inisial:"BA", nama:"Batik Aminah", waktu:"2 jam lalu",
+     kat:"cat-pengrajin", katLabel:"Pengrajin",
+     judul:"Cara menghitung harga jual kain panjang motif Bunga Lemau?",
+     preview:"Saya bingung menentukan harga yang adil karena biaya bahan pewarna alami naik cukup signifikan bulan ini...",
+     balas:7, suka:14},
+    {inisial:"UN", nama:"Unib — Prodi Ekonomi", waktu:"5 jam lalu",
+     kat:"cat-riset", katLabel:"Riset",
+     judul:"Penelitian: Dampak digitalisasi terhadap pendapatan pengrajin batik lokal",
+     preview:"Kami membuka kesempatan wawancara bagi pengrajin yang mau berbagi pengalaman dalam survei akademik ini...",
+     balas:3, suka:21},
+    {inisial:"DK", nama:"Dekranasda Bengkulu Tengah", waktu:"1 hari lalu",
+     kat:"cat-pemda", katLabel:"Pemerintah",
+     judul:"Program pameran UMKM Batik Bengkulu Tengah — Pendaftaran Dibuka",
+     preview:"Kami mengundang pengrajin terverifikasi untuk berpartisipasi dalam pameran produk unggulan Oktober 2026...",
+     balas:12, suka:38},
+    {inisial:"KP", nama:"KPw BI Bengkulu", waktu:"2 hari lalu",
+     kat:"cat-pasar", katLabel:"Pembiayaan",
+     judul:"Cara mengakses KUR untuk pengrajin batik — tanya jawab",
+     preview:"Banyak yang bertanya soal persyaratan KUR untuk UMKM kerajinan. Berikut penjelasan lengkap dari kami...",
+     balas:18, suka:45}
+  ];
+  document.getElementById("forum-threads").innerHTML=threads.map(function(t){
+    return '<article class="forum-thread" tabindex="0" aria-label="Topik: '+SLGD.esc(t.judul)+'">'+
+      '<div class="forum-thread-header">'+
+        '<div class="forum-avatar" aria-hidden="true">'+SLGD.esc(t.inisial)+'</div>'+
+        '<div class="forum-meta">'+
+          '<div class="forum-author">'+SLGD.esc(t.nama)+'</div>'+
+          '<div class="forum-time">'+SLGD.esc(t.waktu)+'</div>'+
+        '</div>'+
+        '<span class="forum-category '+t.kat+'">'+SLGD.esc(t.katLabel)+'</span>'+
+      '</div>'+
+      '<h4>'+SLGD.esc(t.judul)+'</h4>'+
+      '<p>'+SLGD.esc(t.preview)+'</p>'+
+      '<div class="forum-stats">'+
+        '<span>'+SLGD.icon("chat",13)+' '+t.balas+' balasan</span>'+
+        '<span>'+SLGD.icon("check",13)+' '+t.suka+' apresiasi</span>'+
+      '</div>'+
+    '</article>';
+  }).join("");
+
+  /* Anggota aktif */
+  ["BA","UN","DK","KP","MR","SP","GN"].forEach(function(a){
+    var d=document.createElement("div");
+    d.title="Anggota aktif";
+    d.style.cssText="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--maroon-mist),#E8C4CC);color:var(--maroon);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;font-family:var(--font-heading);flex-shrink:0;";
+    d.textContent=a;
+    document.getElementById("anggota-aktif").appendChild(d);
+  });
+  var more=document.createElement("div");
+  more.style.cssText="width:32px;height:32px;border-radius:50%;background:var(--beige-deep);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;flex-shrink:0;";
+  more.textContent="+5";
+  document.getElementById("anggota-aktif").appendChild(more);
+
+  /* Program pendampingan */
+  var programs=[
+    {iconCls:"prog-icon-1", iconName:"camera",
+     status:"prog-open", statusLabel:"Pendaftaran Dibuka",
+     judul:"Pelatihan Fotografi Produk Batik",
+     mitra:"GenBI Bengkulu & LemauGo.id",
+     desc:"Pelatihan intensif memotret produk batik dengan smartphone untuk keperluan marketplace dan media sosial.",
+     meta:[{icon:"bell",text:"15 – 17 Oktober 2026"},{icon:"pin",text:"Kampung Batik Panca Mukti"},{icon:"users",text:"Maks. 20 peserta pengrajin"}]},
+    {iconCls:"prog-icon-2", iconName:"wallet",
+     status:"prog-open", statusLabel:"Pendaftaran Dibuka",
+     judul:"Workshop Literasi Keuangan UMKM",
+     mitra:"KPw Bank Indonesia Bengkulu",
+     desc:"Pembinaan pencatatan keuangan sederhana, akses KUR, dan penggunaan QRIS untuk transaksi harian pengrajin.",
+     meta:[{icon:"bell",text:"22 Oktober 2026"},{icon:"pin",text:"Kantor Dekranasda Bengkulu Tengah"},{icon:"users",text:"Terbuka untuk semua pengrajin terverifikasi"}]},
+    {iconCls:"prog-icon-3", iconName:"shield",
+     status:"prog-active", statusLabel:"Sedang Berjalan",
+     judul:"Pendampingan Sertifikasi Indikasi Geografis",
+     mitra:"MPIG & Dekranasda Bengkulu Tengah",
+     desc:"Proses pendampingan pengrajin baru untuk memenuhi standar produksi dan dokumentasi dalam rangka verifikasi IG.",
+     meta:[{icon:"bell",text:"Sep – Des 2026"},{icon:"pin",text:"Kunjungan ke rumah produksi"},{icon:"users",text:"Batch 3 · 5 pengrajin aktif"}]},
+    {iconCls:"prog-icon-4", iconName:"book",
+     status:"prog-coming", statusLabel:"Segera Hadir",
+     judul:"Program Digital Volunteer Batik",
+     mitra:"Universitas Bengkulu",
+     desc:"Mahasiswa sukarela membantu pengrajin dalam pengelolaan konten digital, desain grafis, dan manajemen toko online.",
+     meta:[{icon:"bell",text:"November 2026 (Rencananya)"},{icon:"pin",text:"Remote & Kunjungan Lapangan"},{icon:"users",text:"20 slot mahasiswa volunteer"}]}
+  ];
+  document.getElementById("programs-grid").innerHTML=programs.map(function(p){
+    var metaHtml=p.meta.map(function(m){ return '<li>'+SLGD.icon(m.icon,13)+' '+SLGD.esc(m.text)+'</li>'; }).join("");
+    return '<article class="program-card" role="listitem">'+
+      '<div class="program-header">'+
+        '<div class="program-icon '+p.iconCls+'">'+SLGD.icon(p.iconName,22)+'</div>'+
+        '<div class="program-info">'+
+          '<h3>'+SLGD.esc(p.judul)+'</h3>'+
+          '<span class="prog-status '+p.status+'">'+SLGD.esc(p.statusLabel)+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="program-body">'+
+        '<p><strong style="color:var(--terracotta);">'+SLGD.esc(p.mitra)+'</strong></p>'+
+        '<p>'+SLGD.esc(p.desc)+'</p>'+
+        '<ul class="program-meta-list">'+metaHtml+'</ul>'+
+        '<button class="btn btn-secondary btn-small" onclick="SLGD.toast(\'Fitur pendaftaran program akan segera tersedia.\')">Daftar Program</button>'+
+      '</div>'+
+    '</article>';
+  }).join("");
+
+  /* Kolaborasi ikon */
+  document.getElementById("chk-1").innerHTML=SLGD.icon("check",12);
+  document.getElementById("chk-2").innerHTML=SLGD.icon("check",12);
+  document.getElementById("chk-3").innerHTML=SLGD.icon("check",12);
+  document.getElementById("chk-4").innerHTML=SLGD.icon("check",12);
+  document.getElementById("collab-icon-join").innerHTML=SLGD.icon("users",18);
+  document.getElementById("kol-icon-send").innerHTML=SLGD.icon("arrowRight",18);
+
+  /* Join section */
+  document.getElementById("join-icon-main").innerHTML=SLGD.icon("users",22);
+  document.getElementById("join-note-1").innerHTML=SLGD.icon("shield",14)+" Pengrajin Terverifikasi";
+  document.getElementById("join-note-2").innerHTML=SLGD.icon("check",14)+" Gratis bergabung";
+  document.getElementById("join-note-3").innerHTML=SLGD.icon("users",14)+" Komunitas aktif";
+
+  /* Aksi forum */
+  window.kirimForum=function(){
+    var nama=document.getElementById("forum-nama").value.trim();
+    var judul=document.getElementById("forum-judul").value.trim();
+    if(!nama||!judul){ SLGD.toast("Harap isi nama dan judul diskusi terlebih dahulu."); return; }
+    SLGD.toast("Diskusi berhasil dikirim! Kami akan menampilkannya setelah moderasi.");
+    ["forum-nama","forum-judul","forum-pesan"].forEach(function(id){ document.getElementById(id).value=""; });
+    document.getElementById("forum-kategori").value="";
+  };
+
+  /* Aksi kolaborasi */
+  window.kirimKolaborasi=function(){
+    var nama=document.getElementById("kol-nama").value.trim();
+    var email=document.getElementById("kol-email").value.trim();
+    var jenis=document.getElementById("kol-jenis").value;
+    if(!nama||!email||!jenis){ SLGD.toast("Harap lengkapi nama, email, dan jenis kolaborasi."); return; }
+    SLGD.toast("Pengajuan kolaborasi berhasil! Tim kami akan menghubungi Anda segera.");
+    ["kol-nama","kol-email","kol-pesan"].forEach(function(id){ document.getElementById(id).value=""; });
+    document.getElementById("kol-jenis").value="";
+  };
+
+  /* Modal */
+  var modalGabung=document.getElementById("modal-gabung");
+  window.bukaModalGabung=function(){
+    modalGabung.removeAttribute("hidden");
+    var f=modalGabung.querySelector("button,a");
+    if(f) f.focus();
+    document.addEventListener("keydown",onEsc);
+  };
+  window.tutupModalGabung=function(){
+    modalGabung.setAttribute("hidden","");
+    document.removeEventListener("keydown",onEsc);
+  };
+  function onEsc(e){ if(e.key==="Escape") tutupModalGabung(); }
+  modalGabung.addEventListener("click",function(e){ if(e.target===modalGabung) tutupModalGabung(); });
+
+})();
+</script>
+</body>
+</html>

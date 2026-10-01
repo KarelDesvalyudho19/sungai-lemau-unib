@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Volunteer — LemauGo.id</title>
+<meta name="description" content="Sistem volunteer digital untuk mahasiswa yang ingin berkontribusi mendampingi pengrajin Batik Sungai Lemau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root{--maroon:#6B1F2A;--maroon-dark:#4E1520;--maroon-soft:#82253A;--maroon-mist:#F9F0F2;--beige:#F5F0E6;--beige-warm:#EFE8D8;--beige-deep:#E4D8C2;--gold-pale:#FDF6E9}
+.dv-hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 60%,#7D2436 100%);color:var(--beige);padding:var(--s8) 0 var(--s7);text-align:center;position:relative;overflow:hidden}
+.dv-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(195,154,82,.05) 0,rgba(195,154,82,.05) 1px,transparent 0,transparent 50%);background-size:22px 22px}
+.dv-hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 var(--s5)}
+.dv-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(195,154,82,.18);border:1px solid rgba(195,154,82,.4);color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:var(--s4)}
+.dv-hero h1{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--beige);margin-bottom:var(--s3)}
+.dv-hero p{font-size:var(--fs-base);color:rgba(245,240,230,.78);max-width:560px;margin:0 auto var(--s5)}
+.dv-hero-stats{display:flex;gap:var(--s5);justify-content:center;flex-wrap:wrap}
+.dv-hero-stat{text-align:center}
+.dv-hero-stat-num{font-family:var(--font-heading);font-size:2rem;font-weight:700;color:var(--gold)}
+.dv-hero-stat-lbl{font-size:11px;color:rgba(245,240,230,.7)}
+.dv-main{max-width:960px;margin:0 auto;padding:var(--s7) var(--s5)}
+.dv-card{background:#fff;border:1px solid var(--beige-deep);border-radius:18px;padding:var(--s6);box-shadow:0 2px 20px rgba(107,31,42,.06);margin-bottom:var(--s5)}
+.dv-card h3{font-family:var(--font-heading);font-size:1.25rem;color:var(--maroon-dark);margin-bottom:var(--s5);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--beige-deep);padding-bottom:var(--s3)}
+/* Task cards */
+.task-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s4)}
+.task-card{background:var(--beige);border:2px solid var(--beige-deep);border-radius:14px;padding:var(--s4);transition:border-color .2s,box-shadow .2s,transform .15s;cursor:pointer}
+.task-card:hover{border-color:var(--maroon-soft);box-shadow:0 4px 14px rgba(107,31,42,.1);transform:translateY(-2px)}
+.task-jenis{font-weight:700;color:var(--maroon-dark);margin-bottom:6px;font-size:var(--fs-base)}
+.task-desc{font-size:12px;color:var(--text-muted,#6E6A5E);margin-bottom:var(--s3);line-height:1.5}
+.task-meta{display:flex;justify-content:space-between;align-items:center}
+.task-poin{background:var(--gold-pale);border:1px solid rgba(195,154,82,.3);color:#7A5820;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.task-est{font-size:11px;color:var(--text-muted,#6E6A5E)}
+.btn-daftar{background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-weight:700;font-size:var(--fs-small);cursor:pointer;margin-top:var(--s3);width:100%;transition:background .2s}
+.btn-daftar:hover{background:var(--maroon-soft)}
+/* Volunteer list */
+.vol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s4)}
+.vol-card{background:var(--beige);border:1px solid var(--beige-deep);border-radius:14px;padding:var(--s4);transition:box-shadow .2s}
+.vol-card:hover{box-shadow:0 4px 14px rgba(107,31,42,.08)}
+.vol-header{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s3)}
+.vol-avatar{width:48px;height:48px;border-radius:50%;background:var(--maroon);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0}
+.vol-nama{font-weight:700;color:var(--maroon-dark)}
+.vol-kampus{font-size:12px;color:var(--text-muted,#6E6A5E)}
+.vol-poin-bar{margin-top:var(--s3)}
+.vol-poin-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.vol-bar{height:8px;background:var(--beige-deep);border-radius:4px;overflow:hidden}
+.vol-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft))}
+.vol-tugas{margin-top:var(--s3)}
+.vol-tugas-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted,#6E6A5E);margin-bottom:4px}
+.t-ok{color:#065F46}.t-run{color:#1E40AF}
+/* Form daftar */
+.daftar-form{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.fg{display:flex;flex-direction:column;gap:6px}.fg.full{grid-column:1/-1}
+.fg label{font-size:12px;font-weight:700;color:var(--maroon-dark);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{border:1.5px solid var(--beige-deep);border-radius:8px;padding:10px 14px;font-size:var(--fs-base);font-family:inherit;background:#fff;color:var(--maroon-dark);transition:border-color .2s;outline:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--maroon)}
+.form-actions{display:flex;gap:var(--s3);margin-top:var(--s4)}
+.btn-primary{background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--maroon-soft)}
+@media(max-width:640px){.daftar-form{grid-template-columns:1fr}.task-grid,.vol-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="dv-hero">
+  <div class="dv-hero-inner">
+    <div class="dv-badge">&#127979; Digital Volunteer</div>
+    <h1>Volunteer Digital Batik Sungai Lemau</h1>
+    <p>Bergabunglah sebagai volunteer mahasiswa dan bantu pengrajin batik go digital. Setiap kontribusi bernilai poin dan sertifikat pengakuan.</p>
+    <div class="dv-hero-stats">
+      <div class="dv-hero-stat"><div class="dv-hero-stat-num">5</div><div class="dv-hero-stat-lbl">Volunteer Aktif</div></div>
+      <div class="dv-hero-stat"><div class="dv-hero-stat-num">5</div><div class="dv-hero-stat-lbl">Jenis Tugas</div></div>
+      <div class="dv-hero-stat"><div class="dv-hero-stat-num">9</div><div class="dv-hero-stat-lbl">Kegiatan Selesai</div></div>
+      <div class="dv-hero-stat"><div class="dv-hero-stat-num">3</div><div class="dv-hero-stat-lbl">Kampus Mitra</div></div>
+    </div>
+  </div>
+</section>
+<div class="dv-main">
+  <!-- Daftar Tugas -->
+  <div class="dv-card">
+    <h3>&#9998; Daftar Tugas Volunteer</h3>
+    <div class="task-grid" id="task-grid"></div>
+  </div>
+  <!-- Volunteer aktif -->
+  <div class="dv-card">
+    <h3>&#128100; Volunteer Aktif</h3>
+    <div class="vol-grid" id="vol-grid"></div>
+  </div>
+  <!-- Form daftar -->
+  <div class="dv-card">
+    <h3>&#43; Daftar sebagai Volunteer</h3>
+    <form id="form-vol" onsubmit="APP.daftar(event)">
+      <div class="daftar-form">
+        <div class="fg"><label for="v-nama">Nama Lengkap *</label><input id="v-nama" type="text" placeholder="Nama sesuai KTM" required></div>
+        <div class="fg"><label for="v-kampus">Kampus / Universitas *</label><input id="v-kampus" type="text" placeholder="cth. Universitas Bengkulu" required></div>
+        <div class="fg"><label for="v-prodi">Program Studi *</label><input id="v-prodi" type="text" placeholder="cth. Teknik Informatika" required></div>
+        <div class="fg"><label for="v-email">Email *</label><input id="v-email" type="email" placeholder="email aktif Anda" required></div>
+        <div class="fg"><label for="v-bidang">Bidang Keahlian *</label>
+          <select id="v-bidang" required><option value="">-- Pilih Bidang --</option><option>Desain Grafis</option><option>Teknik Informatika</option><option>Ilmu Komunikasi</option><option>Manajemen</option><option>Fotografi</option><option>Lainnya</option></select>
+        </div>
+        <div class="fg"><label for="v-tugas">Tugas yang Diminati *</label>
+          <select id="v-tugas" required><option value="">-- Pilih Tugas --</option><option>Foto Produk</option><option>Upload Katalog</option><option>Pendampingan UMKM</option><option>Pelatihan Digital</option><option>Konten Medsos</option></select>
+        </div>
+        <div class="fg full"><label for="v-motivasi">Motivasi Bergabung</label><textarea id="v-motivasi" placeholder="Ceritakan alasan Anda ingin berkontribusi..."></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">&#9654; Daftar Sekarang</button>
+      </div>
+    </form>
+  </div>
+  <!-- Laporan Aktivitas -->
+  <div class="dv-card">
+    <h3>&#128196; Laporan Aktivitas Terbaru</h3>
+    <div id="laporan-aktivitas"></div>
+  </div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP=(function(){
+  SLGD.renderPublicHeader("digital-volunteer");
+  SLGD.renderPublicFooter();
+  function R(id){return document.getElementById(id);}
+  function inisial(n){return n.split(" ").map(function(x){return x[0];}).join("").substring(0,2).toUpperCase();}
+  function renderTasks(){
+    R("task-grid").innerHTML=SLGD.DATA.tugasVolunteer.map(function(t){
+      return '<div class="task-card"><div class="task-jenis">'+SLGD.esc(t.jenis)+'</div><div class="task-desc">'+SLGD.esc(t.deskripsi)+'</div><div class="task-meta"><span class="task-poin">+'+t.poin+' poin</span><span class="task-est">~'+t.estimasi+'</span></div><button class="btn-daftar" onclick="APP.ambilTugas(\''+SLGD.esc(t.jenis)+'\')">Ambil Tugas</button></div>';
+    }).join("");
+  }
+  function renderVols(){
+    R("vol-grid").innerHTML=SLGD.DATA.volunteers.map(function(v){
+      var pct=Math.min(Math.round(v.poin/500*100),100);
+      var tugas=v.tugas.slice(0,3).map(function(t){
+        return '<div class="vol-tugas-item"><span class="'+(t.status==="Selesai"?"t-ok":"t-run")+'">&#9679;</span> '+SLGD.esc(t.jenis)+' — '+SLGD.esc(t.pengrajin)+'</div>';
+      }).join("");
+      return '<div class="vol-card"><div class="vol-header"><div class="vol-avatar">'+inisial(v.nama)+'</div><div><div class="vol-nama">'+SLGD.esc(v.nama)+'</div><div class="vol-kampus">'+SLGD.esc(v.kampus)+' · '+SLGD.esc(v.prodi)+'</div></div></div><div class="vol-poin-bar"><div class="vol-poin-lbl"><span style="font-weight:700;font-size:12px">'+v.poin+' poin</span><span style="font-size:11px;color:var(--text-muted)">target 500</span></div><div class="vol-bar"><div class="vol-bar-fill" style="width:'+pct+'%"></div></div></div><div class="vol-tugas">'+tugas+'</div></div>';
+    }).join("");
+  }
+  function renderLaporan(){
+    var semua=[];
+    SLGD.DATA.volunteers.forEach(function(v){
+      v.tugas.forEach(function(t){semua.push({nama:v.nama,kampus:v.kampus,jenis:t.jenis,pengrajin:t.pengrajin,tgl:t.tgl,status:t.status});});
+    });
+    semua.sort(function(a,b){return b.tgl.localeCompare(a.tgl);});
+    var chip=function(s){return s==="Selesai"?'<span style="background:#D1FAE5;color:#065F46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Selesai</span>':'<span style="background:#DBEAFE;color:#1E40AF;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">Berjalan</span>';};
+    R("laporan-aktivitas").innerHTML='<table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--maroon-mist)"><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Volunteer</th><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Universitas</th><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Kegiatan</th><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Pengrajin</th><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Tanggal</th><th style="padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--maroon-dark);border-bottom:2px solid var(--beige-deep)">Status</th></tr></thead><tbody>'+
+    semua.map(function(l){return '<tr style="border-bottom:1px solid var(--beige-deep)"><td style="padding:10px 14px;font-size:var(--fs-small)"><strong>'+SLGD.esc(l.nama)+'</strong></td><td style="padding:10px 14px;font-size:var(--fs-small)">'+SLGD.esc(l.kampus)+'</td><td style="padding:10px 14px;font-size:var(--fs-small)">'+SLGD.esc(l.jenis)+'</td><td style="padding:10px 14px;font-size:var(--fs-small)">'+SLGD.esc(l.pengrajin)+'</td><td style="padding:10px 14px;font-size:var(--fs-small)">'+l.tgl+'</td><td style="padding:10px 14px">'+chip(l.status)+'</td></tr>';}).join("")+
+    '</tbody></table>';
+  }
+  renderTasks();renderVols();renderLaporan();
+  return {
+    ambilTugas:function(jenis){if(SLGD.toast)SLGD.toast("Tugas \""+jenis+"\" berhasil diambil. Tim akan menghubungi Anda.");},
+    daftar:function(e){
+      e.preventDefault();
+      var nama=document.getElementById("v-nama").value;
+      var kampus=document.getElementById("v-kampus").value;
+      SLGD.DATA.volunteers.push({id:"v-new-"+Date.now(),nama:nama,kampus:kampus,prodi:document.getElementById("v-prodi").value,joined:new Date().toISOString().split("T")[0],status:"Aktif",poin:0,tugas:[]});
+      renderVols();e.target.reset();
+      if(SLGD.toast)SLGD.toast("Selamat bergabung, "+nama+"! Kami akan segera menghubungi Anda.");
+    }
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impact Dashboard — LemauGo.id</title>
+<meta name="description" content="LemauGo Impact Index: pantau dampak nyata ekosistem digital Batik Sungai Lemau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root{--maroon:#6B1F2A;--maroon-dark:#4E1520;--maroon-soft:#82253A;--maroon-mist:#F9F0F2;--beige:#F5F0E6;--beige-warm:#EFE8D8;--beige-deep:#E4D8C2;--gold-pale:#FDF6E9}
+.imp-hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 60%,#7D2436 100%);color:var(--beige);padding:var(--s9) 0 var(--s8);text-align:center;position:relative;overflow:hidden}
+.imp-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(195,154,82,.05) 0,rgba(195,154,82,.05) 1px,transparent 0,transparent 50%);background-size:22px 22px}
+.imp-hero-inner{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 var(--s5)}
+.imp-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(195,154,82,.18);border:1px solid rgba(195,154,82,.4);color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:var(--s5)}
+.imp-hero h1{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--beige);margin-bottom:var(--s4)}
+/* Index ring */
+.index-ring-wrap{display:flex;align-items:center;justify-content:center;gap:var(--s7);flex-wrap:wrap;margin:var(--s6) 0}
+.index-ring{position:relative;width:160px;height:160px;flex-shrink:0}
+.index-ring svg{transform:rotate(-90deg)}
+.index-ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.index-num{font-family:var(--font-heading);font-size:2.6rem;font-weight:700;color:var(--gold);line-height:1}
+.index-sub{font-size:11px;color:rgba(245,240,230,.7);margin-top:2px}
+.index-info{max-width:320px;text-align:left}
+.index-status{font-family:var(--font-heading);font-size:1.4rem;color:var(--gold);margin-bottom:var(--s2)}
+.index-desc{font-size:var(--fs-small);color:rgba(245,240,230,.75);line-height:1.6}
+/* Main */
+.imp-main{max-width:960px;margin:0 auto;padding:var(--s7) var(--s5)}
+.imp-card{background:#fff;border:1px solid var(--beige-deep);border-radius:18px;padding:var(--s6);box-shadow:0 2px 20px rgba(107,31,42,.06);margin-bottom:var(--s5)}
+.imp-card h3{font-family:var(--font-heading);font-size:1.25rem;color:var(--maroon-dark);margin-bottom:var(--s5);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--beige-deep);padding-bottom:var(--s3)}
+/* Indikator */
+.ind-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--s4)}
+.ind-card{background:var(--beige);border:1px solid var(--beige-deep);border-radius:14px;padding:var(--s4)}
+.ind-label{font-size:12px;font-weight:700;color:var(--text-muted,#6E6A5E);margin-bottom:var(--s2)}
+.ind-nilai{font-family:var(--font-heading);font-size:1.8rem;color:var(--maroon);font-weight:700;line-height:1;margin-bottom:6px}
+.ind-bar{height:8px;background:var(--beige-deep);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.ind-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft))}
+.ind-target{font-size:11px;color:var(--text-muted,#6E6A5E)}
+/* Chart area */
+.chart-wrap{overflow-x:auto}
+.chart-svg{min-width:460px;width:100%;height:200px}
+.chart-bar-group{cursor:pointer}
+.chart-bar-group:hover .chart-bar{opacity:.85}
+/* Milestone timeline */
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--beige-deep)}
+.tl-item{position:relative;margin-bottom:var(--s4)}
+.tl-dot{position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--maroon);border:2px solid #fff;box-shadow:0 0 0 2px var(--maroon)}
+.tl-date{font-size:11px;font-weight:700;color:var(--maroon);margin-bottom:3px}
+.tl-text{font-size:var(--fs-small);color:var(--maroon-dark)}
+@media(max-width:640px){.ind-grid{grid-template-columns:1fr 1fr}.index-ring-wrap{flex-direction:column;text-align:center}.index-info{text-align:center}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="imp-hero">
+  <div class="imp-hero-inner">
+    <div class="imp-badge">&#127775; LemauGo Impact Index</div>
+    <h1>Impact Monitoring Dashboard</h1>
+    <div class="index-ring-wrap">
+      <div class="index-ring">
+        <svg viewBox="0 0 160 160" width="160" height="160">
+          <circle cx="80" cy="80" r="64" fill="none" stroke="rgba(245,240,230,0.15)" stroke-width="14"/>
+          <circle id="ring-fill" cx="80" cy="80" r="64" fill="none" stroke="var(--gold)" stroke-width="14" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="402"/>
+        </svg>
+        <div class="index-ring-label">
+          <div class="index-num" id="ring-num">0</div>
+          <div class="index-sub">/ 100</div>
+        </div>
+      </div>
+      <div class="index-info">
+        <div class="index-status" id="index-status">Tumbuh Positif</div>
+        <div class="index-desc">LemauGo Impact Index mengukur perkembangan ekosistem Batik Sungai Lemau berdasarkan 5 indikator utama: pengrajin aktif, produk IG, transaksi, volunteer, dan kolaborasi stakeholder.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="imp-main">
+  <!-- Indikator -->
+  <div class="imp-card">
+    <h3>&#127919; Indikator Utama</h3>
+    <div class="ind-grid" id="ind-grid"></div>
+  </div>
+  <!-- Grafik perkembangan -->
+  <div class="imp-card">
+    <h3>&#128200; Tren Bulanan (Maret — Agustus 2026)</h3>
+    <div style="margin-bottom:var(--s3);display:flex;gap:var(--s3);flex-wrap:wrap">
+      <button class="btn-chart active" id="btn-transaksi" onclick="APP.showChart('transaksi')" style="background:var(--maroon);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer">Transaksi</button>
+      <button class="btn-chart" id="btn-pengrajin" onclick="APP.showChart('pengrajin')" style="background:var(--beige-deep);color:var(--maroon-dark);border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">Pengrajin</button>
+      <button class="btn-chart" id="btn-volunteer" onclick="APP.showChart('volunteer')" style="background:var(--beige-deep);color:var(--maroon-dark);border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer">Volunteer</button>
+    </div>
+    <div class="chart-wrap"><svg class="chart-svg" id="chart-svg" viewBox="0 0 580 200"></svg></div>
+  </div>
+  <!-- Milestone -->
+  <div class="imp-card">
+    <h3>&#127942; Pencapaian Ekosistem</h3>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP=(function(){
+  SLGD.renderPublicHeader("impact-dashboard");
+  SLGD.renderPublicFooter();
+  var D=SLGD.DATA.impact;
+  var currentChart="transaksi";
+  /* Animate index */
+  var target=D.index;var current=0;
+  var circ=2*Math.PI*64;
+  var step=function(){
+    current=Math.min(current+1.2,target);
+    document.getElementById("ring-num").textContent=current.toFixed(1);
+    document.getElementById("ring-fill").setAttribute("stroke-dashoffset",String(circ-(circ*current/100)));
+    document.getElementById("index-status").textContent=D.status;
+    if(current<target)requestAnimationFrame(step);
+  };
+  setTimeout(step,400);
+  /* Indikator */
+  function renderInd(){
+    document.getElementById("ind-grid").innerHTML=D.indikator.map(function(ind){
+      var pct=Math.min(Math.round(ind.nilai/ind.target*100),100);
+      var display=ind.satuan==="rupiah"?"Rp "+ind.nilai.toLocaleString("id-ID"):ind.nilai+" "+ind.satuan;
+      return '<div class="ind-card"><div class="ind-label">'+SLGD.esc(ind.label)+'</div><div class="ind-nilai">'+display+'</div><div class="ind-bar"><div class="ind-bar-fill" style="width:'+pct+'%"></div></div><div class="ind-target">Target: '+(ind.satuan==="rupiah"?"Rp "+ind.target.toLocaleString("id-ID"):ind.target+" "+ind.satuan)+' ('+pct+'%)</div></div>';
+    }).join("");
+  }
+  /* Chart */
+  function renderChart(key){
+    var svg=document.getElementById("chart-svg");
+    var data=D.bulanan;
+    var vals=data.map(function(d){return key==="transaksi"?d.transaksi/1000000:key==="pengrajin"?d.pengrajin:d.volunteer;});
+    var maxVal=Math.max.apply(null,vals)||1;
+    var W=580;var H=180;var pad=40;var bw=60;var gap=20;
+    var colors={transaksi:"#6B1F2A",pengrajin:"#C39A52",volunteer:"#1A78C2"};
+    var html='';
+    data.forEach(function(d,i){
+      var val=vals[i];
+      var bh=Math.round((val/maxVal)*(H-pad));
+      var x=i*(bw+gap)+gap;
+      var y=H-bh;
+      var label=key==="transaksi"?(val.toFixed(1)+"jt"):val;
+      html+='<g class="chart-bar-group">'+
+        '<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="6" fill="'+colors[key]+'" opacity="0.85"/>'+
+        '<text x="'+(x+bw/2)+'" y="'+(y-6)+'" text-anchor="middle" font-size="10" font-weight="700" fill="'+colors[key]+'">'+label+'</text>'+
+        '<text x="'+(x+bw/2)+'" y="'+(H+14)+'" text-anchor="middle" font-size="11" fill="#6E6A5E">'+d.bulan+'</text>'+
+      '</g>';
+    });
+    svg.innerHTML=html;
+  }
+  /* Timeline */
+  function renderTimeline(){
+    document.getElementById("timeline").innerHTML=D.milestone.slice().reverse().map(function(m){
+      return '<div class="tl-item"><div class="tl-dot"></div><div class="tl-date">'+m.tgl+'</div><div class="tl-text">'+SLGD.esc(m.teks)+'</div></div>';
+    }).join("");
+  }
+  renderInd();renderChart("transaksi");renderTimeline();
+  return {
+    showChart:function(key){
+      currentChart=key;
+      ["transaksi","pengrajin","volunteer"].forEach(function(k){
+        var b=document.getElementById("btn-"+k);
+        b.style.background=k===key?"var(--maroon)":"var(--beige-deep)";
+        b.style.color=k===key?"#fff":"var(--maroon-dark)";
+        b.style.fontWeight=k===key?"700":"600";
+      });
+      renderChart(key);
+    }
+  };
+})();
+</script>
+</body>
+</html>

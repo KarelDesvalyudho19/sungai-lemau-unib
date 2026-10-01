@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modul Edukasi — LemauGo.id</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+.edu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
+.edu-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-m); padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
+.edu-meta { font-size: var(--fs-tiny); color: var(--text-muted); display: flex; gap: var(--s3); }
+.edu-card h3 { font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; margin: 0; }
+.edu-card p { font-size: var(--fs-small); color: var(--text-muted); margin: 0 0 var(--s2); flex: 1; }
+@media (max-width: 900px) { .edu-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#konten">Lewati ke konten utama</a>
+<header id="site-header" class="site-header"></header>
+
+<main id="konten">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Edukasi Pemasaran Digital</span>
+      <h1>Belajar Singkat, Langsung Dipraktikkan</h1>
+      <p>Belajar pemasaran digital melalui materi singkat dan praktis. Setiap modul dirancang 5–10 menit dan dapat langsung diterapkan pada usaha batik Anda.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="edu-grid" id="edu-grid"></div>
+      <div class="info-callout" style="margin-top: var(--s6);">
+        <span id="ic-1"></span>
+        <span>Versi lengkap modul — termasuk checklist, contoh, dan kuis — tersedia di area pengrajin setelah masuk. <a href="masuk.html">Masuk sebagai pengrajin</a> untuk mencoba (akun demo).</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer" class="site-footer"></footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  SLGD.renderPublicHeader("./", "edukasi");
+  SLGD.renderPublicFooter("./");
+  document.getElementById("ic-1").outerHTML = SLGD.icon("info", 18);
+
+  document.getElementById("edu-grid").innerHTML = SLGD.DATA.modules.map(function (m) {
+    return '<article class="edu-card">' +
+      '<div class="edu-meta"><span>' + m.durasi + "</span><span>Level " + m.level + "</span></div>" +
+      "<h3>" + SLGD.esc(m.judul) + "</h3>" +
+      "<p>" + SLGD.esc(m.ringkas) + "</p>" +
+      '<a class="btn btn-secondary btn-small" href="masuk.html" style="align-self:flex-start;">Mulai Belajar</a>' +
+    "</article>";
+  }).join("");
+})();
+</script>
+</body>
+</html>

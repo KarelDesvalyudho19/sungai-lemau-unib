@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stakeholder Dashboard — LemauGo.id</title>
+<meta name="description" content="Dashboard khusus stakeholder ekosistem Batik Sungai Lemau: MPIG, Pemerintah, Universitas, dan Lembaga Keuangan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root{--maroon:#6B1F2A;--maroon-dark:#4E1520;--maroon-soft:#82253A;--maroon-mist:#F9F0F2;--beige:#F5F0E6;--beige-warm:#EFE8D8;--beige-deep:#E4D8C2;--gold-pale:#FDF6E9}
+.sh-hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 60%,#7D2436 100%);color:var(--beige);padding:var(--s8) 0 var(--s7);text-align:center;position:relative;overflow:hidden}
+.sh-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(195,154,82,.05) 0,rgba(195,154,82,.05) 1px,transparent 0,transparent 50%);background-size:22px 22px}
+.sh-hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 var(--s5)}
+.sh-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(195,154,82,.18);border:1px solid rgba(195,154,82,.4);color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:var(--s4)}
+.sh-hero h1{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--beige);margin-bottom:var(--s3)}
+.sh-hero p{font-size:var(--fs-base);color:rgba(245,240,230,.78);max-width:540px;margin:0 auto}
+.role-tabs{background:var(--beige);border-bottom:1px solid var(--beige-deep);padding:var(--s3) 0;position:sticky;top:0;z-index:100}
+.role-tabs-inner{max-width:960px;margin:0 auto;padding:0 var(--s5);display:flex;gap:var(--s2);flex-wrap:wrap}
+.rtab{padding:9px 18px;border-radius:8px;border:2px solid var(--beige-deep);background:#fff;font-weight:600;font-size:var(--fs-small);color:var(--text-muted,#6E6A5E);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.rtab.active{border-color:var(--maroon);background:var(--maroon);color:#fff}
+.rtab:hover:not(.active){border-color:var(--maroon-soft);color:var(--maroon)}
+.sh-main{max-width:960px;margin:0 auto;padding:var(--s7) var(--s5)}
+.sh-card{background:#fff;border:1px solid var(--beige-deep);border-radius:18px;padding:var(--s6);box-shadow:0 2px 20px rgba(107,31,42,.06);margin-bottom:var(--s5)}
+.sh-card h3{font-family:var(--font-heading);font-size:1.25rem;color:var(--maroon-dark);margin-bottom:var(--s5);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--beige-deep);padding-bottom:var(--s3)}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);margin-bottom:var(--s5)}
+.kpi{background:var(--beige);border:1px solid var(--beige-deep);border-radius:14px;padding:var(--s4);text-align:center}
+.kpi-num{font-family:var(--font-heading);font-size:2.2rem;color:var(--maroon);font-weight:700;line-height:1}
+.kpi-lbl{font-size:12px;color:var(--text-muted,#6E6A5E);margin-top:4px}
+.data-tbl{width:100%;border-collapse:collapse}
+.data-tbl th{background:var(--maroon-mist);color:var(--maroon-dark);font-size:12px;font-weight:700;letter-spacing:.04em;padding:10px 14px;text-align:left;border-bottom:2px solid var(--beige-deep)}
+.data-tbl td{padding:10px 14px;border-bottom:1px solid var(--beige-deep);font-size:var(--fs-small)}
+.data-tbl tr:last-child td{border-bottom:none}
+.data-tbl tr:hover td{background:var(--maroon-mist)}
+.chip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.chip-ok{background:#D1FAE5;color:#065F46}.chip-run{background:#DBEAFE;color:#1E40AF}.chip-soon{background:#FEF3C7;color:#92400E}
+.bar-wrap{height:8px;background:var(--beige-deep);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft))}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+@media(max-width:640px){.kpi-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="sh-hero">
+  <div class="sh-hero-inner">
+    <div class="sh-badge">&#127759; Stakeholder Dashboard</div>
+    <h1>Dashboard Ekosistem LemauGo.id</h1>
+    <p>Pantau perkembangan ekosistem Batik Sungai Lemau dari perspektif setiap pemangku kepentingan.</p>
+  </div>
+</section>
+<div class="role-tabs">
+  <div class="role-tabs-inner">
+    <button class="rtab active" id="tab-mpig" onclick="APP.showTab('mpig')">&#9733; MPIG</button>
+    <button class="rtab" id="tab-pemerintah" onclick="APP.showTab('pemerintah')">&#127963; Pemerintah &amp; Dekranasda</button>
+    <button class="rtab" id="tab-universitas" onclick="APP.showTab('universitas')">&#127979; Universitas</button>
+    <button class="rtab" id="tab-keuangan" onclick="APP.showTab('keuangan')">&#128176; Lembaga Keuangan</button>
+  </div>
+</div>
+<div class="sh-main">
+  <div id="tab-content-mpig"></div>
+  <div id="tab-content-pemerintah" style="display:none"></div>
+  <div id="tab-content-universitas" style="display:none"></div>
+  <div id="tab-content-keuangan" style="display:none"></div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP=(function(){
+  SLGD.renderPublicHeader("stakeholder-dashboard");
+  SLGD.renderPublicFooter();
+  var D=SLGD.DATA.stakeholder;
+  function R(id){return document.getElementById(id);}
+  function chip(s){var m={"Selesai":"chip-ok","Berjalan":"chip-run","Aktif":"chip-run","Akan Datang":"chip-soon","Lunas":"chip-ok","Diproses":"chip-soon"};return '<span class="chip '+(m[s]||"chip-run")+'">'+s+'</span>';}
+  function rupiah(n){return "Rp "+n.toLocaleString("id-ID");}
+  function renderMPIG(){
+    var d=D.mpig;
+    R("tab-content-mpig").innerHTML=
+      '<div class="kpi-row"><div class="kpi"><div class="kpi-num">'+d.totalProdukIG+'</div><div class="kpi-lbl">Total Pengajuan IG</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.reviewBerjalan+'</div><div class="kpi-lbl">Sedang Direview</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.terverifikasi+'</div><div class="kpi-lbl">Terverifikasi IG</div></div></div>'+
+      '<div class="sh-card"><h3>&#9776; Aktivitas Kurasi Terbaru</h3>'+
+      '<table class="data-tbl"><thead><tr><th>Tanggal</th><th>Produk</th><th>Aksi</th><th>Reviewer</th></tr></thead><tbody>'+
+      d.aktivitas.map(function(a){return '<tr><td>'+a.tgl+'</td><td>'+SLGD.esc(a.produk)+'</td><td>'+chip(a.aksi==="Disetujui"?"Selesai":a.aksi==="Ditolak"?"Ditolak":"Berjalan")+' '+SLGD.esc(a.aksi)+'</td><td>'+SLGD.esc(a.reviewer||"-")+'</td></tr>';}).join("")+
+      '</tbody></table></div>'+
+      '<div class="sh-card"><h3>&#9675; Status Pengajuan</h3>'+
+      [["Terverifikasi IG","Terverifikasi",d.terverifikasi,d.totalProdukIG],["Review MPIG","Direview",d.reviewBerjalan,d.totalProdukIG],["Menunggu","Menunggu",d.menunggu,d.totalProdukIG],["Ditolak","Ditolak",d.ditolak,d.totalProdukIG]].map(function(x){
+        var pct=Math.round(x[2]/x[3]*100);
+        return '<div style="margin-bottom:var(--s4)"><div class="prog-row"><span style="font-size:var(--fs-small);font-weight:600">'+x[1]+'</span><span style="font-size:var(--fs-small);font-weight:700;color:var(--maroon)">'+x[2]+' produk ('+pct+'%)</span></div><div class="bar-wrap"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
+      }).join("")+'</div>';
+  }
+  function renderPemerintah(){
+    var d=D.pemerintah;
+    R("tab-content-pemerintah").innerHTML=
+      '<div class="kpi-row"><div class="kpi"><div class="kpi-num">'+d.jumlahUMKM+'</div><div class="kpi-lbl">UMKM Pengrajin</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+rupiah(d.totalTransaksi)+'</div><div class="kpi-lbl">Total Transaksi 2026</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.programAktif+'</div><div class="kpi-lbl">Program Aktif</div></div></div>'+
+      '<div class="sh-card"><h3>&#9998; Program Pendampingan</h3>'+
+      '<table class="data-tbl"><thead><tr><th>Program</th><th>Peserta</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>'+
+      d.programs.map(function(p){return '<tr><td><strong>'+SLGD.esc(p.nama)+'</strong></td><td>'+p.peserta+' orang</td><td>'+chip(p.status)+'</td><td>'+p.tgl+'</td></tr>';}).join("")+
+      '</tbody></table></div>'+
+      '<div class="sh-card"><h3>&#128200; Perkembangan Triwulan</h3>'+
+      d.triwulan.map(function(q){return '<div style="margin-bottom:var(--s4)"><div class="prog-row"><span style="font-weight:600">'+q.periode+'</span><span style="font-size:var(--fs-small);color:var(--maroon);font-weight:700">'+q.umkm+' UMKM &bull; '+rupiah(q.transaksi)+'</span></div><div class="bar-wrap"><div class="bar-fill" style="width:'+Math.round(q.transaksi/50000000*100)+'%"></div></div></div>';}).join("")+'</div>';
+  }
+  function renderUniversitas(){
+    var d=D.universitas;
+    R("tab-content-universitas").innerHTML=
+      '<div class="kpi-row"><div class="kpi"><div class="kpi-num">'+d.volunteerAktif+'</div><div class="kpi-lbl">Volunteer Aktif</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.kegiatanSelesai+'</div><div class="kpi-lbl">Kegiatan Selesai</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.programRiset+'</div><div class="kpi-lbl">Program Riset</div></div></div>'+
+      '<div class="sh-card"><h3>&#127979; Volunteer Aktif</h3>'+
+      '<table class="data-tbl"><thead><tr><th>Nama</th><th>Kampus</th><th>Bidang</th><th>Kegiatan</th><th>Status</th></tr></thead><tbody>'+
+      d.volunteers.map(function(v){return '<tr><td><strong>'+SLGD.esc(v.nama)+'</strong></td><td>'+SLGD.esc(v.kampus)+'</td><td>'+SLGD.esc(v.bidang)+'</td><td>'+SLGD.esc(v.kegiatan)+'</td><td>'+chip(v.status)+'</td></tr>';}).join("")+
+      '</tbody></table></div>'+
+      '<div class="sh-card"><h3>&#128196; Program Riset</h3>'+
+      '<table class="data-tbl"><thead><tr><th>Judul Riset</th><th>Peneliti</th><th>Status</th></tr></thead><tbody>'+
+      d.riset.map(function(r){return '<tr><td><strong>'+SLGD.esc(r.judul)+'</strong></td><td>'+SLGD.esc(r.peneliti)+'</td><td>'+chip(r.status)+'</td></tr>';}).join("")+
+      '</tbody></table></div>';
+  }
+  function renderKeuangan(){
+    var d=D.lembagaKeuangan;
+    R("tab-content-keuangan").innerHTML=
+      '<div class="kpi-row"><div class="kpi"><div class="kpi-num">'+d.pengajuan+'</div><div class="kpi-lbl">Pengajuan Pembiayaan</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+d.disetujui+'</div><div class="kpi-lbl">Disetujui</div></div>'+
+      '<div class="kpi"><div class="kpi-num">'+rupiah(d.totalDisalurkan)+'</div><div class="kpi-lbl">Total Disalurkan</div></div></div>'+
+      '<div class="sh-card"><h3>&#128176; Riwayat Pembiayaan</h3>'+
+      '<table class="data-tbl"><thead><tr><th>Pengrajin</th><th>Jumlah</th><th>Tujuan</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>'+
+      d.pinjaman.map(function(p){return '<tr><td><strong>'+SLGD.esc(p.pengrajin)+'</strong></td><td>'+rupiah(p.jumlah)+'</td><td>'+SLGD.esc(p.tujuan)+'</td><td>'+chip(p.status)+'</td><td>'+p.tgl+'</td></tr>';}).join("")+
+      '</tbody></table></div>';
+  }
+  renderMPIG();
+  return {
+    showTab:function(tab){
+      ["mpig","pemerintah","universitas","keuangan"].forEach(function(t){
+        R("tab-content-"+t).style.display=t===tab?"block":"none";
+        R("tab-"+t).classList.toggle("active",t===tab);
+      });
+      if(tab==="pemerintah")renderPemerintah();
+      if(tab==="universitas")renderUniversitas();
+      if(tab==="keuangan")renderKeuangan();
+    }
+  };
+})();
+</script>
+</body>
+</html>

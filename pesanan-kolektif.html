@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pesanan Kolektif — LemauGo.id</title>
+<meta name="description" content="Platform Collaborative Bulk Order: pesanan besar yang dikerjakan bersama oleh pengrajin Batik Sungai Lemau.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+:root{--maroon:#6B1F2A;--maroon-dark:#4E1520;--maroon-soft:#82253A;--maroon-mist:#F9F0F2;--beige:#F5F0E6;--beige-warm:#EFE8D8;--beige-deep:#E4D8C2;--gold-pale:#FDF6E9}
+.pk-hero{background:linear-gradient(135deg,var(--maroon-dark) 0%,var(--maroon) 60%,#7D2436 100%);color:var(--beige);padding:var(--s8) 0 var(--s7);text-align:center;position:relative;overflow:hidden}
+.pk-hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(195,154,82,.05) 0,rgba(195,154,82,.05) 1px,transparent 0,transparent 50%);background-size:22px 22px}
+.pk-hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 var(--s5)}
+.pk-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(195,154,82,.18);border:1px solid rgba(195,154,82,.4);color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:var(--s4)}
+.pk-hero h1{font-family:var(--font-heading);font-size:clamp(1.8rem,4vw,2.8rem);color:var(--beige);margin-bottom:var(--s3)}
+.pk-hero p{font-size:var(--fs-base);color:rgba(245,240,230,.78);max-width:560px;margin:0 auto}
+.pk-main{max-width:960px;margin:0 auto;padding:var(--s7) var(--s5)}
+.pk-card{background:#fff;border:1px solid var(--beige-deep);border-radius:18px;padding:var(--s6);box-shadow:0 2px 20px rgba(107,31,42,.06);margin-bottom:var(--s5)}
+.pk-card h3{font-family:var(--font-heading);font-size:1.25rem;color:var(--maroon-dark);margin-bottom:var(--s5);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--beige-deep);padding-bottom:var(--s3)}
+/* Bulk order cards */
+.bulk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:var(--s4)}
+.bulk-card{background:var(--beige);border:2px solid var(--beige-deep);border-radius:16px;padding:var(--s5);transition:border-color .2s,box-shadow .2s}
+.bulk-card:hover{border-color:var(--maroon-soft);box-shadow:0 4px 16px rgba(107,31,42,.1)}
+.bulk-card.open{border-color:rgba(195,154,82,.5)}
+.bulk-card.penuh{border-color:rgba(26,120,194,.4)}
+.bulk-card.selesai{border-color:#D1FAE5}
+.bulk-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--s3)}
+.bulk-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.bs-open{background:rgba(195,154,82,.2);color:#7A5820}
+.bs-penuh{background:#DBEAFE;color:#1E40AF}
+.bs-selesai{background:#D1FAE5;color:#065F46}
+.bulk-nama{font-family:var(--font-heading);font-size:1.1rem;font-weight:700;color:var(--maroon-dark);margin-bottom:4px;line-height:1.25}
+.bulk-pemohon{font-size:12px;color:var(--text-muted,#6E6A5E);margin-bottom:var(--s3)}
+.bulk-desc{font-size:var(--fs-small);color:var(--maroon-dark);margin-bottom:var(--s3);line-height:1.6}
+.bulk-meta{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin-bottom:var(--s4)}
+.bulk-meta-item{background:#fff;border-radius:8px;padding:8px 10px}
+.bulk-meta-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#6E6A5E);margin-bottom:2px}
+.bulk-meta-val{font-size:var(--fs-small);font-weight:700;color:var(--maroon-dark)}
+.bulk-progress{margin-bottom:var(--s3)}
+.bp-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.bp-bar{height:10px;background:var(--beige-deep);border-radius:5px;overflow:hidden}
+.bp-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--maroon-dark),var(--maroon-soft));transition:width 1s ease}
+.bulk-pengrajin{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--s3)}
+.prj-chip{background:var(--maroon-mist);color:var(--maroon);font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px}
+.btn-gabung{background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-weight:700;font-size:var(--fs-small);cursor:pointer;width:100%;transition:background .2s}
+.btn-gabung:hover{background:var(--maroon-soft)}
+.btn-gabung:disabled{background:var(--beige-deep);color:var(--text-muted);cursor:not-allowed}
+/* Form buat pesanan */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.fg{display:flex;flex-direction:column;gap:6px}.fg.full{grid-column:1/-1}
+.fg label{font-size:12px;font-weight:700;color:var(--maroon-dark);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg textarea,.fg select{border:1.5px solid var(--beige-deep);border-radius:8px;padding:10px 14px;font-size:var(--fs-base);font-family:inherit;background:#fff;color:var(--maroon-dark);transition:border-color .2s;outline:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--maroon)}
+.fg textarea{resize:vertical;min-height:80px}
+.form-actions{display:flex;gap:var(--s3);margin-top:var(--s4)}
+.btn-submit{background:var(--maroon);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-submit:hover{background:var(--maroon-soft)}
+@media(max-width:640px){.bulk-grid,.form-grid{grid-template-columns:1fr}.bulk-meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+<div id="site-header"></div>
+<main id="main-content">
+<section class="pk-hero">
+  <div class="pk-hero-inner">
+    <div class="pk-badge">&#128092; Collaborative Bulk Order</div>
+    <h1>Pesanan Kolektif Batik Sungai Lemau</h1>
+    <p>Pesanan besar dikerjakan bersama oleh beberapa pengrajin. Bergabunglah untuk memenuhi permintaan institusi, pemerintah, dan korporasi.</p>
+  </div>
+</section>
+<div class="pk-main">
+  <!-- Daftar pesanan -->
+  <div class="pk-card">
+    <h3>&#128338; Pesanan Kolektif Aktif &amp; Terbaru</h3>
+    <div class="bulk-grid" id="bulk-grid"></div>
+  </div>
+  <!-- Form buat pesanan baru -->
+  <div class="pk-card">
+    <h3>&#43; Buat Pesanan Kolektif Baru</h3>
+    <p style="font-size:var(--fs-small);color:var(--text-muted);margin-bottom:var(--s5)">Anda adalah institusi, pemerintah, atau korporasi yang ingin memesan batik dalam jumlah besar? Isi form berikut dan pengrajin kami akan bergabung memenuhi pesanan Anda.</p>
+    <form id="form-pesanan" onsubmit="APP.buatPesanan(event)">
+      <div class="form-grid">
+        <div class="fg"><label for="p-nama">Nama Pesanan *</label><input id="p-nama" type="text" placeholder="cth. Seragam Batik ASN 2027" required></div>
+        <div class="fg"><label for="p-pemohon">Nama Institusi / Pemohon *</label><input id="p-pemohon" type="text" placeholder="cth. Dinas Pendidikan Bengkulu" required></div>
+        <div class="fg"><label for="p-jumlah">Jumlah Kebutuhan *</label><input id="p-jumlah" type="number" min="1" placeholder="cth. 100" required></div>
+        <div class="fg"><label for="p-satuan">Satuan *</label><input id="p-satuan" type="text" placeholder="cth. potong kemeja, pcs tote bag" required></div>
+        <div class="fg"><label for="p-deadline">Deadline Pengiriman *</label><input id="p-deadline" type="date" required></div>
+        <div class="fg"><label for="p-target">Target Pengrajin</label><input id="p-target" type="number" min="1" placeholder="cth. 3" value="2"></div>
+        <div class="fg full"><label for="p-deskripsi">Deskripsi Pesanan *</label><textarea id="p-deskripsi" placeholder="Jelaskan kebutuhan, spesifikasi motif, ukuran, dan ketentuan lainnya..." required></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">&#9654; Buat Pesanan Kolektif</button>
+      </div>
+    </form>
+  </div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/store.js"></script>
+<script>
+var APP=(function(){
+  SLGD.renderPublicHeader("pesanan-kolektif");
+  SLGD.renderPublicFooter();
+  function R(id){return document.getElementById(id);}
+  function rupiah(n){return "Rp "+n.toLocaleString("id-ID");}
+  function renderBulk(){
+    R("bulk-grid").innerHTML=SLGD.DATA.bulkOrders.map(function(b){
+      var sClass={"Open":"open","Penuh":"penuh","Selesai":"selesai"}[b.status]||"open";
+      var bsClass={"Open":"bs-open","Penuh":"bs-penuh","Selesai":"bs-selesai"}[b.status]||"bs-open";
+      var pengrajinNama=b.pengrajinBergabung.map(function(pid){var a=SLGD.DATA.artisanById(pid);return a?'<span class="prj-chip">'+SLGD.esc(a.nama)+'</span>':"";}).join("");
+      var canJoin=b.status==="Open"&&b.pengrajinBergabung.length<b.targetPengrajin;
+      return '<div class="bulk-card '+sClass+'">'+
+        '<div class="bulk-header"><div><div class="bulk-nama">'+SLGD.esc(b.nama)+'</div><div class="bulk-pemohon">oleh '+SLGD.esc(b.pemohon)+'</div></div>'+
+        '<span class="bulk-status '+bsClass+'">'+b.status+'</span></div>'+
+        '<div class="bulk-desc">'+SLGD.esc(b.deskripsi)+'</div>'+
+        '<div class="bulk-meta">'+
+          '<div class="bulk-meta-item"><div class="bulk-meta-label">Jumlah</div><div class="bulk-meta-val">'+b.jumlah+' '+SLGD.esc(b.satuan)+'</div></div>'+
+          '<div class="bulk-meta-item"><div class="bulk-meta-label">Nilai Pesanan</div><div class="bulk-meta-val">'+rupiah(b.totalNilai)+'</div></div>'+
+          '<div class="bulk-meta-item"><div class="bulk-meta-label">Deadline</div><div class="bulk-meta-val">'+b.deadline+'</div></div>'+
+          '<div class="bulk-meta-item"><div class="bulk-meta-label">Pengrajin</div><div class="bulk-meta-val">'+b.pengrajinBergabung.length+' / '+b.targetPengrajin+'</div></div>'+
+        '</div>'+
+        '<div class="bulk-progress"><div class="bp-header"><span style="font-size:12px;font-weight:700">Progress Produksi</span><span style="font-size:12px;font-weight:700;color:var(--maroon)">'+b.progress+'%</span></div>'+
+        '<div class="bp-bar"><div class="bp-fill" style="width:'+b.progress+'%"></div></div></div>'+
+        (pengrajinNama?'<div class="bulk-pengrajin">'+pengrajinNama+'</div>':'')+
+        '<button class="btn-gabung" '+(canJoin?"":"disabled")+'onclick="APP.gabung(\''+b.id+'\')">'+
+        (b.status==="Selesai"?"&#10003; Pesanan Selesai":b.status==="Penuh"?"Slot Pengrajin Penuh":"&#43; Bergabung sebagai Pengrajin")+'</button>'+
+      '</div>';
+    }).join("");
+  }
+  renderBulk();
+  return {
+    gabung:function(id){
+      var b=SLGD.DATA.bulkOrders.find(function(x){return x.id===id;});
+      if(!b||b.status!=="Open")return;
+      b.pengrajinBergabung.push("p1");
+      if(b.pengrajinBergabung.length>=b.targetPengrajin)b.status="Penuh";
+      renderBulk();
+      if(SLGD.toast)SLGD.toast("Anda berhasil bergabung ke pesanan ini.");
+    },
+    buatPesanan:function(e){
+      e.preventDefault();
+      var jumlah=parseInt(document.getElementById("p-jumlah").value)||0;
+      var target=parseInt(document.getElementById("p-target").value)||2;
+      SLGD.DATA.bulkOrders.unshift({
+        id:"bk-new-"+Date.now(),
+        nama:document.getElementById("p-nama").value,
+        pemohon:document.getElementById("p-pemohon").value,
+        jumlah:jumlah,satuan:document.getElementById("p-satuan").value,
+        deadline:document.getElementById("p-deadline").value,
+        deskripsi:document.getElementById("p-deskripsi").value,
+        status:"Open",pengrajinBergabung:[],targetPengrajin:target,progress:0,
+        tgl:new Date().toISOString().split("T")[0],totalNilai:jumlah*350000
+      });
+      renderBulk();e.target.reset();
+      if(SLGD.toast)SLGD.toast("Pesanan kolektif berhasil dibuat. Pengrajin akan segera bergabung.");
+    }
+  };
+})();
+</script>
+</body>
+</html>
